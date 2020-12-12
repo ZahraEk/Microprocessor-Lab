@@ -1,0 +1,102 @@
+/*******************************************************
+This program was created by the
+CodeWizardAVR V3.12 Advanced
+Automatic Program Generator
+© Copyright 1998-2014 Pavel Haiduc, HP InfoTech s.r.l.
+http://www.hpinfotech.com
+
+Project : Code2
+Version : 
+Date    : 12/12/2020
+Author  : zahra
+Company : 
+Comments: 
+
+
+Chip type               : ATmega16
+Program type            : Application
+AVR Core Clock frequency: 12.000000 MHz
+Memory model            : Small
+External RAM size       : 0
+Data Stack size         : 256
+*******************************************************/
+#include <mega16.h>
+#include <delay.h>
+
+
+void main(void)
+{
+    DDRA = 0x00;   
+    DDRB = 0xff;  
+    #asm("sei")
+
+    while (1) {  
+            if(PINA.0==1)   //agar button feshorde shavad  
+            {  
+                PORTB.0 = 1;   //LED aval roshan mishavad
+                delay_ms(50);  //5 saniye delay
+                
+                PORTB.0 = 0;   //LED aval khamosh mishavad
+                PORTB.1 = 1;   //LED 2vom roshan mishavad ta LED 8om b hamin tarigh .. 
+                delay_ms(50);
+                
+                PORTB.1 = 0;    
+                PORTB.2 = 1;
+                delay_ms(50); 
+                
+                PORTB.2 = 0;         
+                PORTB.3 = 1;
+                delay_ms(50);
+                
+                PORTB.3 = 0;     
+                PORTB.4 = 1;
+                delay_ms(50); 
+                
+                PORTB.4 = 0;     
+                PORTB.5 = 1;
+                delay_ms(50); 
+                
+                PORTB.5 = 0;       
+                PORTB.6 = 1;
+                delay_ms(50);  
+                
+                PORTB.6 = 0;        
+                PORTB.7 = 1;
+                delay_ms(50); 
+                
+                PORTB.7 = 0;  //sepas LED 7om khamosh shode    
+                PORTB.6 = 1;  //va LED 6om roshan mishavad ta LED aval hamin ravand edame miyabad ...
+                delay_ms(50); 
+                
+                PORTB.6 = 0; 
+                PORTB.5 = 1;
+                delay_ms(50);
+                
+                PORTB.5 = 0; 
+                PORTB.4 = 1;
+                delay_ms(50); 
+                
+                PORTB.4 = 0;  
+                PORTB.3 = 1;
+                delay_ms(50); 
+                
+                PORTB.3 = 0;    
+                PORTB.2 = 1;
+                delay_ms(50); 
+                
+                PORTB.2 = 0; 
+                PORTB.1 = 0;
+                delay_ms(50); 
+                
+                PORTB.1 = 0;
+                PORTB.0 = 1;
+                delay_ms(50);  
+                
+                PORTB.0 = 0;  
+                
+            } else {  //agar button feshorde nashavad 
+
+                PORTB = 0;  //LED ha roshan nashavand
+            }
+    }
+}
