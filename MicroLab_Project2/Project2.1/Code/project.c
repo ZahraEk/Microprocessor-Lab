@@ -77,13 +77,14 @@ void main(void)
     MCUCSR =(0<<ISC2);
 
 	TIMSK = 0x04;   // Enable timer1 overflow interrupt(TOIE1)
-    #asm ("sei")   // Enable global interrupts
+    #asm ("sei")    // Enable global interrupts
     
     while(1){ 
      ;   //do nothing
      }
   
   }   
+
 
 
 

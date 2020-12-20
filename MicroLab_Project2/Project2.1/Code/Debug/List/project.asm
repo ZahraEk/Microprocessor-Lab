@@ -1384,7 +1384,7 @@ _main:
 ; 0000 004F 	TIMSK = 0x04;   // Enable timer1 overflow interrupt(TOIE1)
 	LDI  R30,LOW(4)
 	OUT  0x39,R30
-; 0000 0050     #asm ("sei")   // Enable global interrupts
+; 0000 0050     #asm ("sei")    // Enable global interrupts
 	sei
 ; 0000 0051 
 ; 0000 0052     while(1){
@@ -1397,6 +1397,7 @@ _0xA:
 _0xD:
 	RJMP _0xD
 ; .FEND
+;
 ;
 ;
 ;

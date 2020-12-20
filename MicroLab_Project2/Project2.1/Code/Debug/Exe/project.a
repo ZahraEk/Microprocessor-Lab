@@ -165,7 +165,7 @@
 ; 0000 004F 	TIMSK = 0x04;   // Enable timer1 overflow interrupt(TOIE1)
 ;PCODE: $00000047 VOL: 0
 ;PCODE: $00000048 VOL: 0
-; 0000 0050     #asm ("sei")   // Enable global interrupts
+; 0000 0050     #asm ("sei")    // Enable global interrupts
 ;PCODE: $00000049 VOL: 0
 	sei
 ;PCODE: $0000004A VOL: 0
@@ -181,6 +181,7 @@
 ;PCODE: $0000004E VOL: 0
 ;PCODE: $0000004F VOL: 0
 ;PCODE: $00000050 VOL: 0
+;
 ;
 ;
 ;
