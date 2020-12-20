@@ -34,63 +34,63 @@ void main(void)
             if(PINA.0==1)   //agar button feshorde shavad  
             {  
                 PORTB.0 = 1;   //LED aval roshan mishavad
-                delay_ms(50);  //5 saniye delay
+                delay_ms(200);  //5 saniye delay
                 
                 PORTB.0 = 0;   //LED aval khamosh mishavad
                 PORTB.1 = 1;   //LED 2vom roshan mishavad ta LED 8om b hamin tarigh .. 
-                delay_ms(50);
+                delay_ms(200);
                 
                 PORTB.1 = 0;    
                 PORTB.2 = 1;
-                delay_ms(50); 
+                delay_ms(200); 
                 
                 PORTB.2 = 0;         
                 PORTB.3 = 1;
-                delay_ms(50);
+                delay_ms(200);
                 
                 PORTB.3 = 0;     
                 PORTB.4 = 1;
-                delay_ms(50); 
+                delay_ms(200); 
                 
                 PORTB.4 = 0;     
                 PORTB.5 = 1;
-                delay_ms(50); 
+                delay_ms(200); 
                 
                 PORTB.5 = 0;       
                 PORTB.6 = 1;
-                delay_ms(50);  
+                delay_ms(200);  
                 
                 PORTB.6 = 0;        
                 PORTB.7 = 1;
-                delay_ms(50); 
+                delay_ms(200); 
                 
                 PORTB.7 = 0;  //sepas LED 7om khamosh shode    
                 PORTB.6 = 1;  //va LED 6om roshan mishavad ta LED aval hamin ravand edame miyabad ...
-                delay_ms(50); 
+                delay_ms(200); 
                 
                 PORTB.6 = 0; 
                 PORTB.5 = 1;
-                delay_ms(50);
+                delay_ms(200);
                 
                 PORTB.5 = 0; 
                 PORTB.4 = 1;
-                delay_ms(50); 
+                delay_ms(200); 
                 
                 PORTB.4 = 0;  
                 PORTB.3 = 1;
-                delay_ms(50); 
+                delay_ms(200); 
                 
                 PORTB.3 = 0;    
                 PORTB.2 = 1;
-                delay_ms(50); 
+                delay_ms(00); 
                 
                 PORTB.2 = 0; 
                 PORTB.1 = 0;
-                delay_ms(50); 
+                delay_ms(200); 
                 
                 PORTB.1 = 0;
                 PORTB.0 = 1;
-                delay_ms(50);  
+                delay_ms(200);  
                 
                 PORTB.0 = 0;  
                 

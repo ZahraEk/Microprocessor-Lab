@@ -1222,103 +1222,105 @@ _0x3:
 ; 0000 0023             {
 ; 0000 0024                 PORTB.0 = 1;   //LED aval roshan mishavad
 	RCALL SUBOPT_0x0
-; 0000 0025                 delay_ms(50);  //5 saniye delay
+; 0000 0025                 delay_ms(200);  //5 saniye delay
 ; 0000 0026 
 ; 0000 0027                 PORTB.0 = 0;   //LED aval khamosh mishavad
 ; 0000 0028                 PORTB.1 = 1;   //LED 2vom roshan mishavad ta LED 8om b hamin tarigh ..
 	SBI  0x18,1
-; 0000 0029                 delay_ms(50);
+; 0000 0029                 delay_ms(200);
 	RCALL SUBOPT_0x1
 ; 0000 002A 
 ; 0000 002B                 PORTB.1 = 0;
 	CBI  0x18,1
 ; 0000 002C                 PORTB.2 = 1;
 	SBI  0x18,2
-; 0000 002D                 delay_ms(50);
+; 0000 002D                 delay_ms(200);
 	RCALL SUBOPT_0x1
 ; 0000 002E 
 ; 0000 002F                 PORTB.2 = 0;
 	CBI  0x18,2
 ; 0000 0030                 PORTB.3 = 1;
 	SBI  0x18,3
-; 0000 0031                 delay_ms(50);
+; 0000 0031                 delay_ms(200);
 	RCALL SUBOPT_0x1
 ; 0000 0032 
 ; 0000 0033                 PORTB.3 = 0;
 	CBI  0x18,3
 ; 0000 0034                 PORTB.4 = 1;
 	SBI  0x18,4
-; 0000 0035                 delay_ms(50);
+; 0000 0035                 delay_ms(200);
 	RCALL SUBOPT_0x1
 ; 0000 0036 
 ; 0000 0037                 PORTB.4 = 0;
 	CBI  0x18,4
 ; 0000 0038                 PORTB.5 = 1;
 	SBI  0x18,5
-; 0000 0039                 delay_ms(50);
+; 0000 0039                 delay_ms(200);
 	RCALL SUBOPT_0x1
 ; 0000 003A 
 ; 0000 003B                 PORTB.5 = 0;
 	CBI  0x18,5
 ; 0000 003C                 PORTB.6 = 1;
 	SBI  0x18,6
-; 0000 003D                 delay_ms(50);
+; 0000 003D                 delay_ms(200);
 	RCALL SUBOPT_0x1
 ; 0000 003E 
 ; 0000 003F                 PORTB.6 = 0;
 	CBI  0x18,6
 ; 0000 0040                 PORTB.7 = 1;
 	SBI  0x18,7
-; 0000 0041                 delay_ms(50);
+; 0000 0041                 delay_ms(200);
 	RCALL SUBOPT_0x1
 ; 0000 0042 
 ; 0000 0043                 PORTB.7 = 0;  //sepas LED 7om khamosh shode
 	CBI  0x18,7
 ; 0000 0044                 PORTB.6 = 1;  //va LED 6om roshan mishavad ta LED aval hamin ravand edame miyabad ...
 	SBI  0x18,6
-; 0000 0045                 delay_ms(50);
+; 0000 0045                 delay_ms(200);
 	RCALL SUBOPT_0x1
 ; 0000 0046 
 ; 0000 0047                 PORTB.6 = 0;
 	CBI  0x18,6
 ; 0000 0048                 PORTB.5 = 1;
 	SBI  0x18,5
-; 0000 0049                 delay_ms(50);
+; 0000 0049                 delay_ms(200);
 	RCALL SUBOPT_0x1
 ; 0000 004A 
 ; 0000 004B                 PORTB.5 = 0;
 	CBI  0x18,5
 ; 0000 004C                 PORTB.4 = 1;
 	SBI  0x18,4
-; 0000 004D                 delay_ms(50);
+; 0000 004D                 delay_ms(200);
 	RCALL SUBOPT_0x1
 ; 0000 004E 
 ; 0000 004F                 PORTB.4 = 0;
 	CBI  0x18,4
 ; 0000 0050                 PORTB.3 = 1;
 	SBI  0x18,3
-; 0000 0051                 delay_ms(50);
+; 0000 0051                 delay_ms(200);
 	RCALL SUBOPT_0x1
 ; 0000 0052 
 ; 0000 0053                 PORTB.3 = 0;
 	CBI  0x18,3
 ; 0000 0054                 PORTB.2 = 1;
 	SBI  0x18,2
-; 0000 0055                 delay_ms(50);
-	RCALL SUBOPT_0x1
+; 0000 0055                 delay_ms(00);
+	LDI  R26,LOW(0)
+	LDI  R27,0
+	CALL _delay_ms
 ; 0000 0056 
 ; 0000 0057                 PORTB.2 = 0;
 	CBI  0x18,2
 ; 0000 0058                 PORTB.1 = 0;
 	CBI  0x18,1
-; 0000 0059                 delay_ms(50);
+; 0000 0059                 delay_ms(200);
 	RCALL SUBOPT_0x1
 ; 0000 005A 
 ; 0000 005B                 PORTB.1 = 0;
 	CBI  0x18,1
 ; 0000 005C                 PORTB.0 = 1;
 	RCALL SUBOPT_0x0
-; 0000 005D                 delay_ms(50);
+; 0000 005D                 delay_ms(200);
 ; 0000 005E 
 ; 0000 005F                 PORTB.0 = 0;
 ; 0000 0060 
@@ -1342,15 +1344,15 @@ _0x44:
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
 SUBOPT_0x0:
 	SBI  0x18,0
-	LDI  R26,LOW(50)
+	LDI  R26,LOW(200)
 	LDI  R27,0
 	CALL _delay_ms
 	CBI  0x18,0
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 13 TIMES, CODE SIZE REDUCTION:21 WORDS
+;OPTIMIZER ADDED SUBROUTINE, CALLED 12 TIMES, CODE SIZE REDUCTION:19 WORDS
 SUBOPT_0x1:
-	LDI  R26,LOW(50)
+	LDI  R26,LOW(200)
 	LDI  R27,0
 	JMP  _delay_ms
 

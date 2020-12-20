@@ -74,7 +74,7 @@
 ; 0000 0024                 PORTB.0 = 1;   //LED aval roshan mishavad
 ;PCODE: $00000018 VOL: 0
 ;PCODE: $00000019 VOL: 0
-; 0000 0025                 delay_ms(50);  //5 saniye delay
+; 0000 0025                 delay_ms(200);  //5 saniye delay
 ;PCODE: $0000001A VOL: 0
 ;PCODE: $0000001B VOL: 0
 ;PCODE: $0000001C VOL: 0
@@ -85,7 +85,7 @@
 ; 0000 0028                 PORTB.1 = 1;   //LED 2vom roshan mishavad ta LED 8om b hamin tarigh ..
 ;PCODE: $0000001F VOL: 0
 ;PCODE: $00000020 VOL: 0
-; 0000 0029                 delay_ms(50);
+; 0000 0029                 delay_ms(200);
 ;PCODE: $00000021 VOL: 0
 ;PCODE: $00000022 VOL: 0
 ;PCODE: $00000023 VOL: 0
@@ -96,7 +96,7 @@
 ; 0000 002C                 PORTB.2 = 1;
 ;PCODE: $00000026 VOL: 0
 ;PCODE: $00000027 VOL: 0
-; 0000 002D                 delay_ms(50);
+; 0000 002D                 delay_ms(200);
 ;PCODE: $00000028 VOL: 0
 ;PCODE: $00000029 VOL: 0
 ;PCODE: $0000002A VOL: 0
@@ -107,7 +107,7 @@
 ; 0000 0030                 PORTB.3 = 1;
 ;PCODE: $0000002D VOL: 0
 ;PCODE: $0000002E VOL: 0
-; 0000 0031                 delay_ms(50);
+; 0000 0031                 delay_ms(200);
 ;PCODE: $0000002F VOL: 0
 ;PCODE: $00000030 VOL: 0
 ;PCODE: $00000031 VOL: 0
@@ -118,7 +118,7 @@
 ; 0000 0034                 PORTB.4 = 1;
 ;PCODE: $00000034 VOL: 0
 ;PCODE: $00000035 VOL: 0
-; 0000 0035                 delay_ms(50);
+; 0000 0035                 delay_ms(200);
 ;PCODE: $00000036 VOL: 0
 ;PCODE: $00000037 VOL: 0
 ;PCODE: $00000038 VOL: 0
@@ -129,7 +129,7 @@
 ; 0000 0038                 PORTB.5 = 1;
 ;PCODE: $0000003B VOL: 0
 ;PCODE: $0000003C VOL: 0
-; 0000 0039                 delay_ms(50);
+; 0000 0039                 delay_ms(200);
 ;PCODE: $0000003D VOL: 0
 ;PCODE: $0000003E VOL: 0
 ;PCODE: $0000003F VOL: 0
@@ -140,7 +140,7 @@
 ; 0000 003C                 PORTB.6 = 1;
 ;PCODE: $00000042 VOL: 0
 ;PCODE: $00000043 VOL: 0
-; 0000 003D                 delay_ms(50);
+; 0000 003D                 delay_ms(200);
 ;PCODE: $00000044 VOL: 0
 ;PCODE: $00000045 VOL: 0
 ;PCODE: $00000046 VOL: 0
@@ -151,7 +151,7 @@
 ; 0000 0040                 PORTB.7 = 1;
 ;PCODE: $00000049 VOL: 0
 ;PCODE: $0000004A VOL: 0
-; 0000 0041                 delay_ms(50);
+; 0000 0041                 delay_ms(200);
 ;PCODE: $0000004B VOL: 0
 ;PCODE: $0000004C VOL: 0
 ;PCODE: $0000004D VOL: 0
@@ -162,7 +162,7 @@
 ; 0000 0044                 PORTB.6 = 1;  //va LED 6om roshan mishavad ta LED aval hamin ravand edame miyabad ...
 ;PCODE: $00000050 VOL: 0
 ;PCODE: $00000051 VOL: 0
-; 0000 0045                 delay_ms(50);
+; 0000 0045                 delay_ms(200);
 ;PCODE: $00000052 VOL: 0
 ;PCODE: $00000053 VOL: 0
 ;PCODE: $00000054 VOL: 0
@@ -173,7 +173,7 @@
 ; 0000 0048                 PORTB.5 = 1;
 ;PCODE: $00000057 VOL: 0
 ;PCODE: $00000058 VOL: 0
-; 0000 0049                 delay_ms(50);
+; 0000 0049                 delay_ms(200);
 ;PCODE: $00000059 VOL: 0
 ;PCODE: $0000005A VOL: 0
 ;PCODE: $0000005B VOL: 0
@@ -184,7 +184,7 @@
 ; 0000 004C                 PORTB.4 = 1;
 ;PCODE: $0000005E VOL: 0
 ;PCODE: $0000005F VOL: 0
-; 0000 004D                 delay_ms(50);
+; 0000 004D                 delay_ms(200);
 ;PCODE: $00000060 VOL: 0
 ;PCODE: $00000061 VOL: 0
 ;PCODE: $00000062 VOL: 0
@@ -195,7 +195,7 @@
 ; 0000 0050                 PORTB.3 = 1;
 ;PCODE: $00000065 VOL: 0
 ;PCODE: $00000066 VOL: 0
-; 0000 0051                 delay_ms(50);
+; 0000 0051                 delay_ms(200);
 ;PCODE: $00000067 VOL: 0
 ;PCODE: $00000068 VOL: 0
 ;PCODE: $00000069 VOL: 0
@@ -206,7 +206,7 @@
 ; 0000 0054                 PORTB.2 = 1;
 ;PCODE: $0000006C VOL: 0
 ;PCODE: $0000006D VOL: 0
-; 0000 0055                 delay_ms(50);
+; 0000 0055                 delay_ms(00);
 ;PCODE: $0000006E VOL: 0
 ;PCODE: $0000006F VOL: 0
 ;PCODE: $00000070 VOL: 0
@@ -217,7 +217,7 @@
 ; 0000 0058                 PORTB.1 = 0;
 ;PCODE: $00000073 VOL: 0
 ;PCODE: $00000074 VOL: 0
-; 0000 0059                 delay_ms(50);
+; 0000 0059                 delay_ms(200);
 ;PCODE: $00000075 VOL: 0
 ;PCODE: $00000076 VOL: 0
 ;PCODE: $00000077 VOL: 0
@@ -228,7 +228,7 @@
 ; 0000 005C                 PORTB.0 = 1;
 ;PCODE: $0000007A VOL: 0
 ;PCODE: $0000007B VOL: 0
-; 0000 005D                 delay_ms(50);
+; 0000 005D                 delay_ms(200);
 ;PCODE: $0000007C VOL: 0
 ;PCODE: $0000007D VOL: 0
 ;PCODE: $0000007E VOL: 0
