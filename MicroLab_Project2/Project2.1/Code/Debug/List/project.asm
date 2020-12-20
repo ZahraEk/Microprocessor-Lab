@@ -1087,6 +1087,8 @@ __DELAY_USW_LOOP:
 ;NAME DEFINITIONS FOR GLOBAL VARIABLES ALLOCATED TO REGISTERS
 	.DEF _i=R4
 	.DEF _i_msb=R5
+	.DEF _counter=R6
+	.DEF _counter_msb=R7
 
 	.CSEG
 	.ORG 0x00
@@ -1103,7 +1105,7 @@ __START_OF_CODE:
 	JMP  0x00
 	JMP  0x00
 	JMP  0x00
-	JMP  0x00
+	JMP  _timer1_ovf_isr
 	JMP  0x00
 	JMP  0x00
 	JMP  0x00
@@ -1125,7 +1127,7 @@ _tbl16_G100:
 
 ;GLOBAL REGISTER VARIABLES INITIALIZATION
 __REG_VARS:
-	.DB  0x0,0x0
+	.DB  0x0,0x0,0x0,0x0
 
 _0x3:
 	.DB  0xBF,0x0,0x86,0x0,0xDB,0x0,0xCF,0x0
@@ -1133,12 +1135,12 @@ _0x3:
 	.DB  0xFF,0x0,0xEF
 
 __GLOBAL_INI_TBL:
-	.DW  0x02
+	.DW  0x04
 	.DW  0x04
 	.DW  __REG_VARS*2
 
 	.DW  0x13
-	.DW  _segment
+	.DW  _SevenSeg
 	.DW  _0x3*2
 
 _0xFFFFFFFF:
@@ -1257,76 +1259,152 @@ __GLOBAL_INI_END:
 ;#include <delay.h>
 ;
 ;int i = 0;
-;int segment[10] = {0b10111111, 0b10000110, 0b11011011, 0b11001111, 0b1100110, 0b11101101, 0b11111101, 0b10000111, 0b1111 ...
+;int counter = 0;  //OverFlow counter
+;int SevenSeg[10] = {0b10111111, 0b10000110, 0b11011011, 0b11001111, 0b1100110, 0b11101101, 0b11111101, 0b10000111, 0b111 ...
 
 	.DSEG
 ;
-;
-;void main(void){
-; 0000 0020 void main(void){
+;interrupt [TIM1_OVF] void timer1_ovf_isr(void)    // Timer1 ISR
+; 0000 0021 {
 
 	.CSEG
-_main:
-; .FSTART _main
-; 0000 0021 while(1)
-_0x4:
-; 0000 0022  {
-; 0000 0023    DDRC.0 = 0;
-	CBI  0x14,0
-; 0000 0024    DDRA = 0xFF;
-	LDI  R30,LOW(255)
-	OUT  0x1A,R30
-; 0000 0025 
-; 0000 0026    if(PINC.0 == 1 ){
+_timer1_ovf_isr:
+; .FSTART _timer1_ovf_isr
+	ST   -Y,R0
+	ST   -Y,R26
+	ST   -Y,R27
+	ST   -Y,R30
+	ST   -Y,R31
+	IN   R30,SREG
+	ST   -Y,R30
+; 0000 0022 
+; 0000 0023      if(counter == 0 ){
+	MOV  R0,R6
+	OR   R0,R7
+	BRNE _0x4
+; 0000 0024 
+; 0000 0025        if(PINC.0 == 1){  //Enable Switch
 	SBIS 0x13,0
-	RJMP _0x9
-; 0000 0027 
-; 0000 0028        for(i=0; i<10 ;i++){
-	CLR  R4
-	CLR  R5
-_0xB:
+	RJMP _0x5
+; 0000 0026 
+; 0000 0027          if(i < 10){
 	LDI  R30,LOW(10)
 	LDI  R31,HIGH(10)
 	CP   R4,R30
 	CPC  R5,R31
-	BRGE _0xC
-; 0000 0029         PORTA = segment[i];
+	BRLT _0xE
+; 0000 0028 
+; 0000 0029            PORTA =  SevenSeg[i];  //Set numbers Of SevenSegment on PORTA
+; 0000 002A 
+; 0000 002B         }else{
+; 0000 002C 
+; 0000 002D            i = 0 ;
+	CLR  R4
+	CLR  R5
+; 0000 002E            PORTA = SevenSeg[i];
+_0xE:
 	MOVW R30,R4
-	LDI  R26,LOW(_segment)
-	LDI  R27,HIGH(_segment)
+	LDI  R26,LOW(_SevenSeg)
+	LDI  R27,HIGH(_SevenSeg)
 	LSL  R30
 	ROL  R31
 	ADD  R26,R30
 	ADC  R27,R31
 	LD   R30,X
 	OUT  0x1B,R30
-; 0000 002A         delay_ms(100);
-	LDI  R26,LOW(100)
-	LDI  R27,0
-	CALL _delay_ms
-; 0000 002B        }
+; 0000 002F 
+; 0000 0030          }
+; 0000 0031 
+; 0000 0032          i++;
 	MOVW R30,R4
 	ADIW R30,1
 	MOVW R4,R30
-	RJMP _0xB
-_0xC:
-; 0000 002C 
-; 0000 002D    }else{
-	RJMP _0xD
-_0x9:
-; 0000 002E        PORTA = 0;
-	LDI  R30,LOW(0)
-	OUT  0x1B,R30
-; 0000 002F    }
-_0xD:
-; 0000 0030 
-; 0000 0031  }
-	RJMP _0x4
-; 0000 0032 
-; 0000 0033 }
-_0xE:
-	RJMP _0xE
+; 0000 0033 
+; 0000 0034         }
+; 0000 0035       }
+_0x5:
+; 0000 0036 
+; 0000 0037     counter++;
+_0x4:
+	MOVW R30,R6
+	ADIW R30,1
+	MOVW R6,R30
+; 0000 0038 
+; 0000 0039     TCNT1H = 0xFF;
+	LDI  R30,LOW(255)
+	OUT  0x2D,R30
+; 0000 003A     TCNT1L = 0xF0;
+	LDI  R30,LOW(240)
+	OUT  0x2C,R30
+; 0000 003B 
+; 0000 003C }
+	LD   R30,Y+
+	OUT  SREG,R30
+	LD   R31,Y+
+	LD   R30,Y+
+	LD   R27,Y+
+	LD   R26,Y+
+	LD   R0,Y+
+	RETI
 ; .FEND
+;
+;void main(void)
+; 0000 003F {
+_main:
+; .FSTART _main
+; 0000 0040     DDRC.0 = 0;  //PORTC.0 initialization
+	CBI  0x14,0
+; 0000 0041     DDRA = 0xFF; //PORTA initialization
+	LDI  R30,LOW(255)
+	OUT  0x1A,R30
+; 0000 0042 
+; 0000 0043 
+; 0000 0044 	TCCR1A = 0x00;
+	LDI  R30,LOW(0)
+	OUT  0x2F,R30
+; 0000 0045 	TCCR1B = 0x01;  // Clock source: System Clock
+	LDI  R30,LOW(1)
+	OUT  0x2E,R30
+; 0000 0046 
+; 0000 0047     // Timer/Counter 1 initialization
+; 0000 0048     TCNT1H = 0xFF;
+	LDI  R30,LOW(255)
+	OUT  0x2D,R30
+; 0000 0049     TCNT1L = 0xF0;
+	LDI  R30,LOW(240)
+	OUT  0x2C,R30
+; 0000 004A 
+; 0000 004B     // External Interrupt initialization
+; 0000 004C     MCUCR =(0<<ISC11) | (0<<ISC10) | (0<<ISC01) | (0<<ISC00);
+	LDI  R30,LOW(0)
+	OUT  0x35,R30
+; 0000 004D     MCUCSR =(0<<ISC2);
+	OUT  0x34,R30
+; 0000 004E 
+; 0000 004F 	TIMSK = 0x04;   // Enable timer1 overflow interrupt(TOIE1)
+	LDI  R30,LOW(4)
+	OUT  0x39,R30
+; 0000 0050     #asm ("sei")   // Enable global interrupts
+	sei
+; 0000 0051 
+; 0000 0052     while(1){
+_0xA:
+; 0000 0053      ;   //do nothing
+; 0000 0054      }
+	RJMP _0xA
+; 0000 0055 
+; 0000 0056   }
+_0xD:
+	RJMP _0xD
+; .FEND
+;
+;
+;
+;
+;
+;
+;
+;
 ;
 	#ifndef __SLEEP_DEFINED__
 	#define __SLEEP_DEFINED__
@@ -1347,22 +1425,11 @@ _0xE:
 	.CSEG
 
 	.DSEG
-_segment:
+_SevenSeg:
 	.BYTE 0x14
 
 	.CSEG
 
 	.CSEG
-_delay_ms:
-	adiw r26,0
-	breq __delay_ms1
-__delay_ms0:
-	__DELAY_USW 0x7D0
-	wdr
-	sbiw r26,1
-	brne __delay_ms0
-__delay_ms1:
-	ret
-
 ;END OF CODE MARKER
 __END_OF_CODE:

@@ -1,7 +1,7 @@
 RAM Allocation [bytes]
 Variable                                                                          Address   Size
 ------------------------------------------------------------------------------------------------
-segment                                                                           0x0160      20
+SevenSeg                                                                          0x0160      20
 
 EEPROM Allocation [bytes]
 Variable                                                                          Address   Size
@@ -11,8 +11,10 @@ Register Allocation
 Variable                                                                          Register  Size
 ------------------------------------------------------------------------------------------------
 i                                                                                 R4,R5        2
+counter                                                                           R6,R7        2
 
 FLASH Allocation [words]
 Function                                                                          Address   Size
 ------------------------------------------------------------------------------------------------
-main                                                                              0x00072     34
+timer1_ovf_isr                                                                    0x00073     46
+main                                                                              0x000A1     19
