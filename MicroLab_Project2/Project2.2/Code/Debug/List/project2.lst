@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.30  C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project2\Project2.2\Code\Debug\List\project2.asm Mon Dec 21 00:18:31 2020
+AVRASM ver. 2.1.30  C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project2\Project2.2\Code\Debug\List\project2.asm Mon Dec 21 16:11:25 2020
 
 C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project2\Project2.2\Code\Debug\List\project2.asm(1088): warning: Register r4 already defined by the .DEF directive
 C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project2\Project2.2\Code\Debug\List\project2.asm(1089): warning: Register r5 already defined by the .DEF directive
@@ -1321,9 +1321,9 @@ C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project2\P
 000078 9631      	ADIW R30,1
 000079 013f      	MOVW R6,R30
                  ; 0000 002B 
-                 ; 0000 002C        if(counter0 ==2){
-00007a e0e2      	LDI  R30,LOW(2)
-00007b e0f0      	LDI  R31,HIGH(2)
+                 ; 0000 002C        if(counter0 ==3){
+00007a e0e3      	LDI  R30,LOW(3)
+00007b e0f0      	LDI  R31,HIGH(3)
 00007c 15e6      	CP   R30,R6
 00007d 05f7      	CPC  R31,R7
 00007e f551      	BRNE _0x4
@@ -1415,9 +1415,9 @@ C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project2\P
 0000b0 014f      	MOVW R8,R30
                  ; 0000 004E 
                  ; 0000 004F 
-                 ; 0000 0050     if(counter1 == 150){
-0000b1 e9e6      	LDI  R30,LOW(150)
-0000b2 e0f0      	LDI  R31,HIGH(150)
+                 ; 0000 0050     if(counter1 == 300){
+0000b1 e2ec      	LDI  R30,LOW(300)
+0000b2 e0f1      	LDI  R31,HIGH(300)
 0000b3 15e8      	CP   R30,R8
 0000b4 05f9      	CPC  R31,R9
 0000b5 f579      	BRNE _0x7

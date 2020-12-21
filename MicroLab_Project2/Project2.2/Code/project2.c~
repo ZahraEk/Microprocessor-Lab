@@ -41,7 +41,7 @@ interrupt [TIM0_OVF] void timer0_ovf_isr(void)    // Timer0 ISR
    
        counter0++;
        
-       if(counter0 ==2){
+       if(counter0 ==3){
            temp = PORTC ^ 0b11111111;
            PORTC= temp ^ 0b11111111;
            PORTD = SevenSeg[SevenSegCounter[lastSevenSeg]];
@@ -77,7 +77,7 @@ interrupt [TIM1_OVF] void timer1_ovf_isr(void)     // Timer1 ISR
         counter1++;
 
     
-    if(counter1 == 100){
+    if(counter1 == 250){
 
          SevenSegCounter[3]++;
 

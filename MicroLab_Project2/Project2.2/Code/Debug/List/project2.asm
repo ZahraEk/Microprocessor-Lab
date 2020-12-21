@@ -1291,9 +1291,9 @@ _timer0_ovf_isr:
 	ADIW R30,1
 	MOVW R6,R30
 ; 0000 002B 
-; 0000 002C        if(counter0 ==2){
-	LDI  R30,LOW(2)
-	LDI  R31,HIGH(2)
+; 0000 002C        if(counter0 ==3){
+	LDI  R30,LOW(3)
+	LDI  R31,HIGH(3)
 	CP   R30,R6
 	CPC  R31,R7
 	BRNE _0x4
@@ -1385,9 +1385,9 @@ _timer1_ovf_isr:
 	MOVW R8,R30
 ; 0000 004E 
 ; 0000 004F 
-; 0000 0050     if(counter1 == 150){
-	LDI  R30,LOW(150)
-	LDI  R31,HIGH(150)
+; 0000 0050     if(counter1 == 300){
+	LDI  R30,LOW(300)
+	LDI  R31,HIGH(300)
 	CP   R30,R8
 	CPC  R31,R9
 	BRNE _0x7

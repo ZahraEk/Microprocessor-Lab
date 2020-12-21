@@ -74,7 +74,7 @@
 ;PCODE: $00000010 VOL: 0
 ;PCODE: $00000011 VOL: 0
 ; 0000 002B 
-; 0000 002C        if(counter0 ==2){
+; 0000 002C        if(counter0 ==3){
 ;PCODE: $00000012 VOL: 0
 ;PCODE: $00000013 VOL: 0
 ;PCODE: $00000014 VOL: 0
@@ -166,7 +166,7 @@
 ;PCODE: $00000049 VOL: 0
 ; 0000 004E 
 ; 0000 004F 
-; 0000 0050     if(counter1 == 150){
+; 0000 0050     if(counter1 == 300){
 ;PCODE: $0000004A VOL: 0
 ;PCODE: $0000004B VOL: 0
 ;PCODE: $0000004C VOL: 0
