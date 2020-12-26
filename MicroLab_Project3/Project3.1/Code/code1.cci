@@ -1,0 +1,11 @@
+VERSION:3 SOURCE_TIMESTAMP:519B09DC
+NODE:I LEVEL:0 LINE:24 "C:\cvavr\inc\mega16.h"
+NODE:I LEVEL:0 LINE:25 "C:\cvavr\inc\stdio.h"
+NODE:I LEVEL:0 LINE:26 "C:\cvavr\inc\delay.h"
+NODE:M LEVEL:0 LINE:28 "F_CPU"
+NODE:M LEVEL:0 LINE:29 "RS"
+NODE:M LEVEL:0 LINE:30 "EN"
+NODE:F LEVEL:0 LINE:37 "main(void)"
+NODE:F LEVEL:0 LINE:65 "lcd_comm(unsigned char x)"
+NODE:F LEVEL:0 LINE:75 "lcd_data(unsigned char x)"
+NODE:F LEVEL:0 LINE:85 "lcd_init(void)"
