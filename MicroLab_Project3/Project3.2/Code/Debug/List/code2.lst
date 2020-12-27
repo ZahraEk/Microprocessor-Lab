@@ -1,6 +1,10 @@
 
-AVRASM ver. 2.1.30  C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project3\Project3.1\Code\Debug\List\code1.asm Sun Dec 27 17:32:11 2020
+AVRASM ver. 2.1.30  C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project3\Project3.2\Code\Debug\List\code2.asm Sun Dec 27 17:30:47 2020
 
+C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project3\Project3.2\Code\Debug\List\code2.asm(1088): warning: Register r4 already defined by the .DEF directive
+C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project3\Project3.2\Code\Debug\List\code2.asm(1089): warning: Register r5 already defined by the .DEF directive
+C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project3\Project3.2\Code\Debug\List\code2.asm(1090): warning: Register r6 already defined by the .DEF directive
+C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project3\Project3.2\Code\Debug\List\code2.asm(1091): warning: Register r7 already defined by the .DEF directive
                  
                  
                  ;CodeVisionAVR C Compiler V3.12 Advanced
@@ -1088,6 +1092,12 @@ AVRASM ver. 2.1.30  C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab
                  	ADD  R31,R0
                  	.ENDM
                  
+                 ;NAME DEFINITIONS FOR GLOBAL VARIABLES ALLOCATED TO REGISTERS
+                 	.DEF _i=R4
+                 	.DEF _i_msb=R5
+                 	.DEF _counter=R6
+                 	.DEF _counter_msb=R7
+                 
                  	.CSEG
                  	.ORG 0x00
                  
@@ -1095,7 +1105,7 @@ AVRASM ver. 2.1.30  C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab
                  __START_OF_CODE:
                  
                  ;INTERRUPT VECTORS
-000000 940c 0033 	JMP  __RESET
+000000 940c 0049 	JMP  __RESET
 000002 940c 0000 	JMP  0x00
 000004 940c 0000 	JMP  0x00
 000006 940c 0000 	JMP  0x00
@@ -1103,7 +1113,7 @@ AVRASM ver. 2.1.30  C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab
 00000a 940c 0000 	JMP  0x00
 00000c 940c 0000 	JMP  0x00
 00000e 940c 0000 	JMP  0x00
-000010 940c 0000 	JMP  0x00
+000010 940c 0076 	JMP  _timer1_ovf_isr
 000012 940c 0000 	JMP  0x00
 000014 940c 0000 	JMP  0x00
 000016 940c 0000 	JMP  0x00
@@ -1129,47 +1139,104 @@ AVRASM ver. 2.1.30  C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab
 000031 0010
 000032 0001      	.DB  0x0,0x10,0x0,0x1,0x10,0x0,0x1,0x0
                  
+                 ;GLOBAL REGISTER VARIABLES INITIALIZATION
+                 __REG_VARS:
+000033 0000
+000034 0000      	.DB  0x0,0x0,0x0,0x0
+                 
+                 _0x3:
+000035 4241
+000036 4443
+000037 4645
+000038 4847      	.DB  0x41,0x42,0x43,0x44,0x45,0x46,0x47,0x48
+000039 4a49
+00003a 4c4b
+00003b 4e4d
+00003c 504f      	.DB  0x49,0x4A,0x4B,0x4C,0x4D,0x4E,0x4F,0x50
+00003d 5251
+00003e 5453
+00003f 5655
+000040 5857      	.DB  0x51,0x52,0x53,0x54,0x55,0x56,0x57,0x58
+000041 5a59      	.DB  0x59,0x5A
+                 
+                 __GLOBAL_INI_TBL:
+000042 0004      	.DW  0x04
+000043 0004      	.DW  0x04
+000044 0066      	.DW  __REG_VARS*2
+                 
+000045 001a      	.DW  0x1A
+000046 0160      	.DW  _alphabet_letters
+000047 006a      	.DW  _0x3*2
+                 
+                 _0xFFFFFFFF:
+000048 0000      	.DW  0
+                 
+                 #define __GLOBAL_INI_TBL_PRESENT 1
+                 
                  __RESET:
-000033 94f8      	CLI
-000034 27ee      	CLR  R30
-000035 bbec      	OUT  EECR,R30
+000049 94f8      	CLI
+00004a 27ee      	CLR  R30
+00004b bbec      	OUT  EECR,R30
                  
                  ;INTERRUPT VECTORS ARE PLACED
                  ;AT THE START OF FLASH
-000036 e0f1      	LDI  R31,1
-000037 bffb      	OUT  GICR,R31
-000038 bfeb      	OUT  GICR,R30
-000039 bfe5      	OUT  MCUCR,R30
+00004c e0f1      	LDI  R31,1
+00004d bffb      	OUT  GICR,R31
+00004e bfeb      	OUT  GICR,R30
+00004f bfe5      	OUT  MCUCR,R30
                  
                  ;CLEAR R2-R14
-00003a e08d      	LDI  R24,(14-2)+1
-00003b e0a2      	LDI  R26,2
-00003c 27bb      	CLR  R27
+000050 e08d      	LDI  R24,(14-2)+1
+000051 e0a2      	LDI  R26,2
+000052 27bb      	CLR  R27
                  __CLEAR_REG:
-00003d 93ed      	ST   X+,R30
-00003e 958a      	DEC  R24
-00003f f7e9      	BRNE __CLEAR_REG
+000053 93ed      	ST   X+,R30
+000054 958a      	DEC  R24
+000055 f7e9      	BRNE __CLEAR_REG
                  
                  ;CLEAR SRAM
-000040 e080      	LDI  R24,LOW(__CLEAR_SRAM_SIZE)
-000041 e094      	LDI  R25,HIGH(__CLEAR_SRAM_SIZE)
-000042 e6a0      	LDI  R26,__SRAM_START
+000056 e080      	LDI  R24,LOW(__CLEAR_SRAM_SIZE)
+000057 e094      	LDI  R25,HIGH(__CLEAR_SRAM_SIZE)
+000058 e6a0      	LDI  R26,__SRAM_START
                  __CLEAR_SRAM:
-000043 93ed      	ST   X+,R30
-000044 9701      	SBIW R24,1
-000045 f7e9      	BRNE __CLEAR_SRAM
+000059 93ed      	ST   X+,R30
+00005a 9701      	SBIW R24,1
+00005b f7e9      	BRNE __CLEAR_SRAM
+                 
+                 ;GLOBAL VARIABLES INITIALIZATION
+00005c e8e4      	LDI  R30,LOW(__GLOBAL_INI_TBL*2)
+00005d e0f0      	LDI  R31,HIGH(__GLOBAL_INI_TBL*2)
+                 __GLOBAL_INI_NEXT:
+00005e 9185      	LPM  R24,Z+
+00005f 9195      	LPM  R25,Z+
+000060 9700      	SBIW R24,0
+000061 f061      	BREQ __GLOBAL_INI_END
+000062 91a5      	LPM  R26,Z+
+000063 91b5      	LPM  R27,Z+
+000064 9005      	LPM  R0,Z+
+000065 9015      	LPM  R1,Z+
+000066 01bf      	MOVW R22,R30
+000067 01f0      	MOVW R30,R0
+                 __GLOBAL_INI_LOOP:
+000068 9005      	LPM  R0,Z+
+000069 920d      	ST   X+,R0
+00006a 9701      	SBIW R24,1
+00006b f7e1      	BRNE __GLOBAL_INI_LOOP
+00006c 01fb      	MOVW R30,R22
+00006d cff0      	RJMP __GLOBAL_INI_NEXT
+                 __GLOBAL_INI_END:
                  
                  ;HARDWARE STACK POINTER INITIALIZATION
-000046 e5ef      	LDI  R30,LOW(__SRAM_END-__HEAP_SIZE)
-000047 bfed      	OUT  SPL,R30
-000048 e0e4      	LDI  R30,HIGH(__SRAM_END-__HEAP_SIZE)
-000049 bfee      	OUT  SPH,R30
+00006e e5ef      	LDI  R30,LOW(__SRAM_END-__HEAP_SIZE)
+00006f bfed      	OUT  SPL,R30
+000070 e0e4      	LDI  R30,HIGH(__SRAM_END-__HEAP_SIZE)
+000071 bfee      	OUT  SPH,R30
                  
                  ;DATA STACK POINTER INITIALIZATION
-00004a e6c0      	LDI  R28,LOW(__SRAM_START+__DSTACK_SIZE)
-00004b e0d1      	LDI  R29,HIGH(__SRAM_START+__DSTACK_SIZE)
+000072 e6c0      	LDI  R28,LOW(__SRAM_START+__DSTACK_SIZE)
+000073 e0d1      	LDI  R29,HIGH(__SRAM_START+__DSTACK_SIZE)
                  
-00004c 940c 004e 	JMP  _main
+000074 940c 00bb 	JMP  _main
                  
                  	.ESEG
                  	.ORG 0
@@ -1187,7 +1254,7 @@ AVRASM ver. 2.1.30  C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab
                  ;
                  ;Project :
                  ;Version :
-                 ;Date    : 12/26/2020
+                 ;Date    : 12/27/2020
                  ;Author  : zahra
                  ;Company :
                  ;Comments:
@@ -1200,7 +1267,6 @@ AVRASM ver. 2.1.30  C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab
                  ;External RAM size       : 0
                  ;Data Stack size         : 256
                  ;*******************************************************/
-                 ;
                  ;#include <mega16.h>
                  	#ifndef __SLEEP_DEFINED__
                  	#define __SLEEP_DEFINED__
@@ -1220,150 +1286,249 @@ AVRASM ver. 2.1.30  C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab
                  ;#define RS 0             //RS=0
                  ;#define EN 1             //EN=1
                  ;
+                 ;int i = 0;
+                 ;int counter = 0;  //OverFlow counter
+                 ;char alphabet_letters[]= {'A','B', 'C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W',' ...
+                 
+                 	.DSEG
+                 ;
                  ;void lcd_comm (char);
                  ;void lcd_data(char);
                  ;void lcd_init (void);
                  ;
-                 ;
-                 ;void main(void)
-                 ; 0000 0026 {
+                 ;interrupt [TIM1_OVF] void timer1_ovf_isr(void)    // Timer1 ISR
+                 ; 0000 0028 {
                  
                  	.CSEG
+                 _timer1_ovf_isr:
+                 ; .FSTART _timer1_ovf_isr
+000076 920a      	ST   -Y,R0
+000077 921a      	ST   -Y,R1
+000078 92fa      	ST   -Y,R15
+000079 936a      	ST   -Y,R22
+00007a 937a      	ST   -Y,R23
+00007b 938a      	ST   -Y,R24
+00007c 939a      	ST   -Y,R25
+00007d 93aa      	ST   -Y,R26
+00007e 93ba      	ST   -Y,R27
+00007f 93ea      	ST   -Y,R30
+000080 93fa      	ST   -Y,R31
+000081 b7ef      	IN   R30,SREG
+000082 93ea      	ST   -Y,R30
+                 ; 0000 0029 
+                 ; 0000 002A      if(counter == 0 ){
+000083 2c06      	MOV  R0,R6
+000084 2807      	OR   R0,R7
+000085 f501      	BRNE _0x4
+                 ; 0000 002B 
+                 ; 0000 002C 
+                 ; 0000 002D 
+                 ; 0000 002E       lcd_init();    //initialize LCD
+000086 d055      	RCALL _lcd_init
+                 ; 0000 002F 
+                 ; 0000 0030      //adding data
+                 ; 0000 0031       for(i=0 ; i<13 ; i++){     //line1
+000087 2444      	CLR  R4
+000088 2455      	CLR  R5
+                 _0x6:
+000089 e0ed      	LDI  R30,LOW(13)
+00008a e0f0      	LDI  R31,HIGH(13)
+00008b 164e      	CP   R4,R30
+00008c 065f      	CPC  R5,R31
+00008d f434      	BRGE _0x7
+                 ; 0000 0032 
+                 ; 0000 0033            lcd_data(alphabet_letters[i]);
+00008e 940e 00eb 	CALL SUBOPT_0x0
+                 ; 0000 0034 
+                 ; 0000 0035       }
+000090 01f2      	MOVW R30,R4
+000091 9631      	ADIW R30,1
+000092 012f      	MOVW R4,R30
+000093 cff5      	RJMP _0x6
+                 _0x7:
+                 ; 0000 0036 
+                 ; 0000 0037       lcd_comm(0xC0);  //go to 2nd line
+000094 eca0      	LDI  R26,LOW(192)
+000095 d035      	RCALL _lcd_comm
+                 ; 0000 0038       lcd_comm(30);    //middle of character
+000096 e1ae      	LDI  R26,LOW(30)
+000097 d033      	RCALL _lcd_comm
+                 ; 0000 0039 
+                 ; 0000 003A       for(i=13 ; i<26 ; i++){     //line2
+000098 e0ed      	LDI  R30,LOW(13)
+000099 e0f0      	LDI  R31,HIGH(13)
+00009a 012f      	MOVW R4,R30
+                 _0x9:
+00009b e1ea      	LDI  R30,LOW(26)
+00009c e0f0      	LDI  R31,HIGH(26)
+00009d 164e      	CP   R4,R30
+00009e 065f      	CPC  R5,R31
+00009f f434      	BRGE _0xA
+                 ; 0000 003B 
+                 ; 0000 003C            lcd_data(alphabet_letters[i]);
+0000a0 940e 00eb 	CALL SUBOPT_0x0
+                 ; 0000 003D 
+                 ; 0000 003E        }
+0000a2 01f2      	MOVW R30,R4
+0000a3 9631      	ADIW R30,1
+0000a4 012f      	MOVW R4,R30
+0000a5 cff5      	RJMP _0x9
+                 _0xA:
+                 ; 0000 003F 
+                 ; 0000 0040 
+                 ; 0000 0041       }
+                 ; 0000 0042 
+                 ; 0000 0043     counter++;
+                 _0x4:
+0000a6 01f3      	MOVW R30,R6
+0000a7 9631      	ADIW R30,1
+0000a8 013f      	MOVW R6,R30
+                 ; 0000 0044 
+                 ; 0000 0045     TCNT1H = 0xFF;
+0000a9 efef      	LDI  R30,LOW(255)
+0000aa bded      	OUT  0x2D,R30
+                 ; 0000 0046     TCNT1L = 0xF0;
+0000ab efe0      	LDI  R30,LOW(240)
+0000ac bdec      	OUT  0x2C,R30
+                 ; 0000 0047 
+                 ; 0000 0048 }
+0000ad 91e9      	LD   R30,Y+
+0000ae bfef      	OUT  SREG,R30
+0000af 91f9      	LD   R31,Y+
+0000b0 91e9      	LD   R30,Y+
+0000b1 91b9      	LD   R27,Y+
+0000b2 91a9      	LD   R26,Y+
+0000b3 9199      	LD   R25,Y+
+0000b4 9189      	LD   R24,Y+
+0000b5 9179      	LD   R23,Y+
+0000b6 9169      	LD   R22,Y+
+0000b7 90f9      	LD   R15,Y+
+0000b8 9019      	LD   R1,Y+
+0000b9 9009      	LD   R0,Y+
+0000ba 9518      	RETI
+                 ; .FEND
+                 ;
+                 ;void main(void)
+                 ; 0000 004B {
                  _main:
                  ; .FSTART _main
-                 ; 0000 0027 
-                 ; 0000 0028 	lcd_init();    //Initialize LCD
-00004e d02b      	RCALL _lcd_init
-                 ; 0000 0029 
-                 ; 0000 002A 	lcd_data('H');  //adding the data
-00004f e4a8      	LDI  R26,LOW(72)
-000050 d01d      	RCALL _lcd_data
-                 ; 0000 002B 	lcd_data('E');
-000051 e4a5      	LDI  R26,LOW(69)
-000052 d01b      	RCALL _lcd_data
-                 ; 0000 002C 	lcd_data('L');
-000053 e4ac      	LDI  R26,LOW(76)
-000054 d019      	RCALL _lcd_data
-                 ; 0000 002D 	lcd_data('L');
-000055 e4ac      	LDI  R26,LOW(76)
-000056 d017      	RCALL _lcd_data
-                 ; 0000 002E 	lcd_data('O');
-000057 e4af      	LDI  R26,LOW(79)
-000058 d015      	RCALL _lcd_data
-                 ; 0000 002F 
-                 ; 0000 0030 	lcd_comm(20);  //create space between the two words
-000059 e1a4      	LDI  R26,LOW(20)
-00005a d00e      	RCALL _lcd_comm
-                 ; 0000 0031 
-                 ; 0000 0032 	lcd_data('W');
-00005b e5a7      	LDI  R26,LOW(87)
-00005c d011      	RCALL _lcd_data
-                 ; 0000 0033 	lcd_data('O');
-00005d e4af      	LDI  R26,LOW(79)
-00005e d00f      	RCALL _lcd_data
-                 ; 0000 0034 	lcd_data('R');
-00005f e5a2      	LDI  R26,LOW(82)
-000060 d00d      	RCALL _lcd_data
-                 ; 0000 0035 	lcd_data('L');
-000061 e4ac      	LDI  R26,LOW(76)
-000062 d00b      	RCALL _lcd_data
-                 ; 0000 0036 	lcd_data('D');
-000063 e4a4      	LDI  R26,LOW(68)
-000064 d009      	RCALL _lcd_data
-                 ; 0000 0037     lcd_data('!');
-000065 e2a1      	LDI  R26,LOW(33)
-000066 d007      	RCALL _lcd_data
-                 ; 0000 0038 
-                 ; 0000 0039 
-                 ; 0000 003A 	while(1)
-                 _0x3:
-                 ; 0000 003B 	{
-                 ; 0000 003C 	;  //do nothing
-                 ; 0000 003D 	}
-000067 cfff      	RJMP _0x3
-                 ; 0000 003E 
-                 ; 0000 003F }
-                 _0x6:
-000068 cfff      	RJMP _0x6
+                 ; 0000 004C 
+                 ; 0000 004D 	TCCR1A = 0x00;
+0000bb e0e0      	LDI  R30,LOW(0)
+0000bc bdef      	OUT  0x2F,R30
+                 ; 0000 004E 	TCCR1B = 0x01;  // Clock source: System Clock
+0000bd e0e1      	LDI  R30,LOW(1)
+0000be bdee      	OUT  0x2E,R30
+                 ; 0000 004F 
+                 ; 0000 0050     // Timer/Counter 1 initialization
+                 ; 0000 0051     TCNT1H = 0xFF;
+0000bf efef      	LDI  R30,LOW(255)
+0000c0 bded      	OUT  0x2D,R30
+                 ; 0000 0052     TCNT1L = 0xF0;
+0000c1 efe0      	LDI  R30,LOW(240)
+0000c2 bdec      	OUT  0x2C,R30
+                 ; 0000 0053 
+                 ; 0000 0054     // External Interrupt initialization
+                 ; 0000 0055     MCUCR =(0<<ISC11) | (0<<ISC10) | (0<<ISC01) | (0<<ISC00);
+0000c3 e0e0      	LDI  R30,LOW(0)
+0000c4 bfe5      	OUT  0x35,R30
+                 ; 0000 0056     MCUCSR =(0<<ISC2);
+0000c5 bfe4      	OUT  0x34,R30
+                 ; 0000 0057 
+                 ; 0000 0058 	TIMSK = 0x04;   // Enable timer1 overflow interrupt(TOIE1)
+0000c6 e0e4      	LDI  R30,LOW(4)
+0000c7 bfe9      	OUT  0x39,R30
+                 ; 0000 0059     #asm ("sei")    // Enable global interrupts
+0000c8 9478      	sei
+                 ; 0000 005A 
+                 ; 0000 005B     while(1){
+                 _0xB:
+                 ; 0000 005C      ;   //do nothing
+                 ; 0000 005D      }
+0000c9 cfff      	RJMP _0xB
+                 ; 0000 005E 
+                 ; 0000 005F  }
+                 _0xE:
+0000ca cfff      	RJMP _0xE
                  ; .FEND
                  ;
                  ;void lcd_comm(char x){
-                 ; 0000 0041 void lcd_comm(char x){
+                 ; 0000 0061 void lcd_comm(char x){
                  _lcd_comm:
                  ; .FSTART _lcd_comm
-                 ; 0000 0042 
-                 ; 0000 0043 	PORTD = x;
-000069 93aa      	ST   -Y,R26
+                 ; 0000 0062 
+                 ; 0000 0063     PORTD = x;
+0000cb 93aa      	ST   -Y,R26
                  ;	x -> Y+0
-00006a 81e8      	LD   R30,Y
-00006b bbe2      	OUT  0x12,R30
-                 ; 0000 0044 	PORTC &= ~(1<<RS);  //RS=0 command reg.
-00006c 98a8      	CBI  0x15,0
-                 ; 0000 0045 	PORTC |= 1<<EN;     //Enable Pulse
-00006d c004      	RJMP _0x2060001
-                 ; 0000 0046 	delay_ms(30);
-                 ; 0000 0047 	PORTC &= ~(1<<EN);  //Disable Pulse
-                 ; 0000 0048 
-                 ; 0000 0049 }
+0000cc 81e8      	LD   R30,Y
+0000cd bbe2      	OUT  0x12,R30
+                 ; 0000 0064     PORTC &= ~(1<<RS);  //RS=0 command reg.
+0000ce 98a8      	CBI  0x15,0
+                 ; 0000 0065     PORTC |= 1<<EN;     //Enable Pulse
+0000cf c004      	RJMP _0x2060001
+                 ; 0000 0066     delay_ms(30);
+                 ; 0000 0067     PORTC &= ~(1<<EN);  //Disable Pulse
+                 ; 0000 0068 
+                 ; 0000 0069 }
                  ; .FEND
                  ;
                  ;void lcd_data(char x){
-                 ; 0000 004B void lcd_data(char x){
+                 ; 0000 006B void lcd_data(char x){
                  _lcd_data:
                  ; .FSTART _lcd_data
-                 ; 0000 004C 
-                 ; 0000 004D 	PORTD = x;
-00006e 93aa      	ST   -Y,R26
+                 ; 0000 006C 
+                 ; 0000 006D     PORTD = x;
+0000d0 93aa      	ST   -Y,R26
                  ;	x -> Y+0
-00006f 81e8      	LD   R30,Y
-000070 bbe2      	OUT  0x12,R30
-                 ; 0000 004E 	PORTC |= 1<<RS;    //RS=1 Data reg.
-000071 9aa8      	SBI  0x15,0
-                 ; 0000 004F 	PORTC |= 1<<EN;    //Enable Pulse
+0000d1 81e8      	LD   R30,Y
+0000d2 bbe2      	OUT  0x12,R30
+                 ; 0000 006E     PORTC |= 1<<RS;    //RS=1 Data reg.
+0000d3 9aa8      	SBI  0x15,0
+                 ; 0000 006F     PORTC |= 1<<EN;    //Enable Pulse
                  _0x2060001:
-000072 9aa9      	SBI  0x15,1
-                 ; 0000 0050 	delay_ms(30);
-000073 e1ae      	LDI  R26,LOW(30)
-000074 e0b0      	LDI  R27,0
-000075 940e 0089 	CALL _delay_ms
-                 ; 0000 0051 	PORTC &= ~(1<<EN); //Disable Pulse
-000077 98a9      	CBI  0x15,1
-                 ; 0000 0052 
-                 ; 0000 0053 }
-000078 9621      	ADIW R28,1
-000079 9508      	RET
+0000d4 9aa9      	SBI  0x15,1
+                 ; 0000 0070     delay_ms(30);
+0000d5 e1ae      	LDI  R26,LOW(30)
+0000d6 e0b0      	LDI  R27,0
+0000d7 940e 00f2 	CALL _delay_ms
+                 ; 0000 0071     PORTC &= ~(1<<EN); //Disable Pulse
+0000d9 98a9      	CBI  0x15,1
+                 ; 0000 0072 
+                 ; 0000 0073 }
+0000da 9621      	ADIW R28,1
+0000db 9508      	RET
                  ; .FEND
                  ;
                  ;void lcd_init(void){
-                 ; 0000 0055 void lcd_init(void){
+                 ; 0000 0075 void lcd_init(void){
                  _lcd_init:
                  ; .FSTART _lcd_init
-                 ; 0000 0056 
-                 ; 0000 0057 	DDRD = 0xFF;      //PORTD initialization
-00007a efef      	LDI  R30,LOW(255)
-00007b bbe1      	OUT  0x11,R30
-                 ; 0000 0058 	DDRC = 0x03;      //PORTC initialization
-00007c e0e3      	LDI  R30,LOW(3)
-00007d bbe4      	OUT  0x14,R30
-                 ; 0000 0059 
-                 ; 0000 005A 	lcd_comm(0x38);   //initialization of 16X2 LCD in 8bit mode
-00007e e3a8      	LDI  R26,LOW(56)
-00007f dfe9      	RCALL _lcd_comm
-                 ; 0000 005B 	lcd_comm(0x06);   //auto Increment cursor
-000080 e0a6      	LDI  R26,LOW(6)
-000081 dfe7      	RCALL _lcd_comm
-                 ; 0000 005C 	lcd_comm(0x0D);   //Display ON Cursor ON
-000082 e0ad      	LDI  R26,LOW(13)
-000083 dfe5      	RCALL _lcd_comm
-                 ; 0000 005D 	lcd_comm(0x01);   //clear display
-000084 e0a1      	LDI  R26,LOW(1)
-000085 dfe3      	RCALL _lcd_comm
-                 ; 0000 005E 	lcd_comm(0x80);   //cursor at home position
-000086 e8a0      	LDI  R26,LOW(128)
-000087 dfe1      	RCALL _lcd_comm
-                 ; 0000 005F 
-                 ; 0000 0060 }
-000088 9508      	RET
+                 ; 0000 0076 
+                 ; 0000 0077     DDRD = 0xFF;      //PORTD initialization
+0000dc efef      	LDI  R30,LOW(255)
+0000dd bbe1      	OUT  0x11,R30
+                 ; 0000 0078     DDRC = 0x03;      //PORTC initialization
+0000de e0e3      	LDI  R30,LOW(3)
+0000df bbe4      	OUT  0x14,R30
+                 ; 0000 0079 
+                 ; 0000 007A     lcd_comm(0x38);   //initialization of 16X2 LCD in 8bit mode
+0000e0 e3a8      	LDI  R26,LOW(56)
+0000e1 dfe9      	RCALL _lcd_comm
+                 ; 0000 007B     lcd_comm(0x06);   //auto Increment cursor
+0000e2 e0a6      	LDI  R26,LOW(6)
+0000e3 dfe7      	RCALL _lcd_comm
+                 ; 0000 007C     lcd_comm(0x0D);   //Display ON Cursor ON
+0000e4 e0ad      	LDI  R26,LOW(13)
+0000e5 dfe5      	RCALL _lcd_comm
+                 ; 0000 007D     lcd_comm(0x01);   //clear display
+0000e6 e0a1      	LDI  R26,LOW(1)
+0000e7 dfe3      	RCALL _lcd_comm
+                 ; 0000 007E     lcd_comm(0x80);   //cursor at home position
+0000e8 e8a0      	LDI  R26,LOW(128)
+0000e9 dfe1      	RCALL _lcd_comm
+                 ; 0000 007F 
+                 ; 0000 0080 }
+0000ea 9508      	RET
                  ; .FEND
                  	#ifndef __SLEEP_DEFINED__
                  	#endif
@@ -1374,25 +1539,38 @@ AVRASM ver. 2.1.30  C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab
                  
                  	.CSEG
                  
+                 	.DSEG
+                 _alphabet_letters:
+000160           	.BYTE 0x1A
+                 
                  	.CSEG
+                 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
+                 SUBOPT_0x0:
+0000eb e6a0      	LDI  R26,LOW(_alphabet_letters)
+0000ec e0b1      	LDI  R27,HIGH(_alphabet_letters)
+0000ed 0da4      	ADD  R26,R4
+0000ee 1db5      	ADC  R27,R5
+0000ef 91ac      	LD   R26,X
+0000f0 940c 00d0 	JMP  _lcd_data
+                 
                  
                  	.CSEG
                  _delay_ms:
-000089 9610      	adiw r26,0
-00008a f039      	breq __delay_ms1
+0000f2 9610      	adiw r26,0
+0000f3 f039      	breq __delay_ms1
                  __delay_ms0:
                 +
-00008b ed80     +LDI R24 , LOW ( 0x7D0 )
-00008c e097     +LDI R25 , HIGH ( 0x7D0 )
+0000f4 ed80     +LDI R24 , LOW ( 0x7D0 )
+0000f5 e097     +LDI R25 , HIGH ( 0x7D0 )
                 +__DELAY_USW_LOOP :
-00008d 9701     +SBIW R24 , 1
-00008e f7f1     +BRNE __DELAY_USW_LOOP
+0000f6 9701     +SBIW R24 , 1
+0000f7 f7f1     +BRNE __DELAY_USW_LOOP
                  	__DELAY_USW 0x7D0
-00008f 95a8      	wdr
-000090 9711      	sbiw r26,1
-000091 f7c9      	brne __delay_ms0
+0000f8 95a8      	wdr
+0000f9 9711      	sbiw r26,1
+0000fa f7c9      	brne __delay_ms0
                  __delay_ms1:
-000092 9508      	ret
+0000fb 9508      	ret
                  
                  ;END OF CODE MARKER
                  __END_OF_CODE:
@@ -1413,41 +1591,41 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 ATmega16 register use summary:
-r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 r5 :   0 r6 :   0 r7 :   0 
-r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16:   0 r17:   0 r18:   0 r19:   0 r20:   0 r21:   0 r22:   0 r23:   0 
-r24:   6 r25:   2 r26:  24 r27:   2 r28:   2 r29:   1 r30:  18 r31:   2 
-x  :   2 y  :   4 z  :   0 
-Registers used: 10 out of 35 (28.6%)
+r0 :   8 r1 :   3 r2 :   0 r3 :   0 r4 :   9 r5 :   4 r6 :   3 r7 :   1 
+r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   2 
+r16:   0 r17:   0 r18:   0 r19:   0 r20:   0 r21:   0 r22:   4 r23:   2 
+r24:  11 r25:   5 r26:  20 r27:   7 r28:   2 r29:   1 r30:  60 r31:  10 
+x  :   4 y  :  28 z  :   7 
+Registers used: 20 out of 35 (57.1%)
 
 ATmega16 instruction use summary:
-.lds  :   0 .lds.l:   0 .sts  :   0 .sts.l:   0 adc   :   0 add   :   0 
-adiw  :   2 and   :   0 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 
-brbc  :   0 brbs  :   0 brcc  :   0 brcs  :   0 break :   0 breq  :   1 
-brge  :   0 brhc  :   0 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 
-brlt  :   0 brmi  :   0 brne  :   4 brpl  :   0 brsh  :   0 brtc  :   0 
-brts  :   0 brvc  :   0 brvs  :   0 bset  :   0 bst   :   0 call  :   1 
+.lds  :   0 .lds.l:   0 .sts  :   0 .sts.l:   0 adc   :   1 add   :   1 
+adiw  :   5 and   :   0 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 
+brbc  :   0 brbs  :   0 brcc  :   0 brcs  :   0 break :   0 breq  :   2 
+brge  :   2 brhc  :   0 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 
+brlt  :   0 brmi  :   0 brne  :   6 brpl  :   0 brsh  :   0 brtc  :   0 
+brts  :   0 brvc  :   0 brvs  :   0 bset  :   0 bst   :   0 call  :   3 
 cbi   :   2 cbr   :   0 clc   :   0 clh   :   0 cli   :   1 cln   :   0 
-clr   :   2 cls   :   0 clt   :   0 clv   :   0 clz   :   0 com   :   0 
-cp    :   0 cpc   :   0 cpi   :   0 cpse  :   0 dec   :   1 des   :   0 
+clr   :   4 cls   :   0 clt   :   0 clv   :   0 clz   :   0 com   :   0 
+cp    :   2 cpc   :   2 cpi   :   0 cpse  :   0 dec   :   1 des   :   0 
 eor   :   0 fmul  :   0 fmuls :   0 fmulsu:   0 icall :   0 ijmp  :   0 
-in    :   0 inc   :   0 jmp   :  22 ld    :   2 ldd   :   0 ldi   :  33 
-lds   :   0 lpm   :   0 lsl   :   0 lsr   :   0 mov   :   0 movw  :   0 
-mul   :   0 muls  :   0 mulsu :   0 neg   :   0 nop   :   0 or    :   0 
-ori   :   0 out   :  10 pop   :   0 push  :   0 rcall :  18 ret   :   3 
-reti  :   0 rjmp  :   3 rol   :   0 ror   :   0 sbc   :   0 sbci  :   0 
-sbi   :   2 sbic  :   0 sbis  :   0 sbiw  :   3 sbr   :   0 sbrc  :   0 
-sbrs  :   0 sec   :   0 seh   :   0 sei   :   0 sen   :   0 ser   :   0 
+in    :   1 inc   :   0 jmp   :  23 ld    :  15 ldd   :   0 ldi   :  41 
+lds   :   0 lpm   :   7 lsl   :   0 lsr   :   0 mov   :   1 movw  :  10 
+mul   :   0 muls  :   0 mulsu :   0 neg   :   0 nop   :   0 or    :   1 
+ori   :   0 out   :  20 pop   :   0 push  :   0 rcall :   8 ret   :   3 
+reti  :   1 rjmp  :   6 rol   :   0 ror   :   0 sbc   :   0 sbci  :   0 
+sbi   :   2 sbic  :   0 sbis  :   0 sbiw  :   5 sbr   :   0 sbrc  :   0 
+sbrs  :   0 sec   :   0 seh   :   0 sei   :   1 sen   :   0 ser   :   0 
 ses   :   0 set   :   0 sev   :   0 sez   :   0 sleep :   0 spm   :   0 
-st    :   4 std   :   0 sts   :   0 sub   :   0 subi  :   0 swap  :   0 
+st    :  17 std   :   0 sts   :   0 sub   :   0 subi  :   0 swap  :   0 
 tst   :   0 wdr   :   1 
-Instructions used: 19 out of 116 (16.4%)
+Instructions used: 31 out of 116 (26.7%)
 
 ATmega16 memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000126    276     18    294   16384   1.8%
-[.dseg] 0x000060 0x000160      0      0      0    1024   0.0%
+[.cseg] 0x000000 0x0001f8    442     62    504   16384   3.1%
+[.dseg] 0x000060 0x00017a      0     26     26    1024   2.5%
 [.eseg] 0x000000 0x000000      0      0      0     512   0.0%
 
-Assembly complete, 0 errors, 0 warnings
+Assembly complete, 0 errors, 4 warnings

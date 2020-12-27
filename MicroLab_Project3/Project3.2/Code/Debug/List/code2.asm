@@ -1084,6 +1084,12 @@ __DELAY_USW_LOOP:
 	ADD  R31,R0
 	.ENDM
 
+;NAME DEFINITIONS FOR GLOBAL VARIABLES ALLOCATED TO REGISTERS
+	.DEF _i=R4
+	.DEF _i_msb=R5
+	.DEF _counter=R6
+	.DEF _counter_msb=R7
+
 	.CSEG
 	.ORG 0x00
 
@@ -1099,7 +1105,7 @@ __START_OF_CODE:
 	JMP  0x00
 	JMP  0x00
 	JMP  0x00
-	JMP  0x00
+	JMP  _timer1_ovf_isr
 	JMP  0x00
 	JMP  0x00
 	JMP  0x00
@@ -1118,6 +1124,30 @@ _tbl10_G100:
 	.DB  0x1,0x0
 _tbl16_G100:
 	.DB  0x0,0x10,0x0,0x1,0x10,0x0,0x1,0x0
+
+;GLOBAL REGISTER VARIABLES INITIALIZATION
+__REG_VARS:
+	.DB  0x0,0x0,0x0,0x0
+
+_0x3:
+	.DB  0x41,0x42,0x43,0x44,0x45,0x46,0x47,0x48
+	.DB  0x49,0x4A,0x4B,0x4C,0x4D,0x4E,0x4F,0x50
+	.DB  0x51,0x52,0x53,0x54,0x55,0x56,0x57,0x58
+	.DB  0x59,0x5A
+
+__GLOBAL_INI_TBL:
+	.DW  0x04
+	.DW  0x04
+	.DW  __REG_VARS*2
+
+	.DW  0x1A
+	.DW  _alphabet_letters
+	.DW  _0x3*2
+
+_0xFFFFFFFF:
+	.DW  0
+
+#define __GLOBAL_INI_TBL_PRESENT 1
 
 __RESET:
 	CLI
@@ -1149,6 +1179,29 @@ __CLEAR_SRAM:
 	SBIW R24,1
 	BRNE __CLEAR_SRAM
 
+;GLOBAL VARIABLES INITIALIZATION
+	LDI  R30,LOW(__GLOBAL_INI_TBL*2)
+	LDI  R31,HIGH(__GLOBAL_INI_TBL*2)
+__GLOBAL_INI_NEXT:
+	LPM  R24,Z+
+	LPM  R25,Z+
+	SBIW R24,0
+	BREQ __GLOBAL_INI_END
+	LPM  R26,Z+
+	LPM  R27,Z+
+	LPM  R0,Z+
+	LPM  R1,Z+
+	MOVW R22,R30
+	MOVW R30,R0
+__GLOBAL_INI_LOOP:
+	LPM  R0,Z+
+	ST   X+,R0
+	SBIW R24,1
+	BRNE __GLOBAL_INI_LOOP
+	MOVW R30,R22
+	RJMP __GLOBAL_INI_NEXT
+__GLOBAL_INI_END:
+
 ;HARDWARE STACK POINTER INITIALIZATION
 	LDI  R30,LOW(__SRAM_END-__HEAP_SIZE)
 	OUT  SPL,R30
@@ -1177,7 +1230,7 @@ __CLEAR_SRAM:
 ;
 ;Project :
 ;Version :
-;Date    : 12/26/2020
+;Date    : 12/27/2020
 ;Author  : zahra
 ;Company :
 ;Comments:
@@ -1190,7 +1243,6 @@ __CLEAR_SRAM:
 ;External RAM size       : 0
 ;Data Stack size         : 256
 ;*******************************************************/
-;
 ;#include <mega16.h>
 	#ifndef __SLEEP_DEFINED__
 	#define __SLEEP_DEFINED__
@@ -1210,149 +1262,248 @@ __CLEAR_SRAM:
 ;#define RS 0             //RS=0
 ;#define EN 1             //EN=1
 ;
+;int i = 0;
+;int counter = 0;  //OverFlow counter
+;char alphabet_letters[]= {'A','B', 'C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W',' ...
+
+	.DSEG
+;
 ;void lcd_comm (char);
 ;void lcd_data(char);
 ;void lcd_init (void);
 ;
-;
-;void main(void)
-; 0000 0026 {
+;interrupt [TIM1_OVF] void timer1_ovf_isr(void)    // Timer1 ISR
+; 0000 0028 {
 
 	.CSEG
+_timer1_ovf_isr:
+; .FSTART _timer1_ovf_isr
+	ST   -Y,R0
+	ST   -Y,R1
+	ST   -Y,R15
+	ST   -Y,R22
+	ST   -Y,R23
+	ST   -Y,R24
+	ST   -Y,R25
+	ST   -Y,R26
+	ST   -Y,R27
+	ST   -Y,R30
+	ST   -Y,R31
+	IN   R30,SREG
+	ST   -Y,R30
+; 0000 0029 
+; 0000 002A      if(counter == 0 ){
+	MOV  R0,R6
+	OR   R0,R7
+	BRNE _0x4
+; 0000 002B 
+; 0000 002C 
+; 0000 002D 
+; 0000 002E       lcd_init();    //initialize LCD
+	RCALL _lcd_init
+; 0000 002F 
+; 0000 0030      //adding data
+; 0000 0031       for(i=0 ; i<13 ; i++){     //line1
+	CLR  R4
+	CLR  R5
+_0x6:
+	LDI  R30,LOW(13)
+	LDI  R31,HIGH(13)
+	CP   R4,R30
+	CPC  R5,R31
+	BRGE _0x7
+; 0000 0032 
+; 0000 0033            lcd_data(alphabet_letters[i]);
+	CALL SUBOPT_0x0
+; 0000 0034 
+; 0000 0035       }
+	MOVW R30,R4
+	ADIW R30,1
+	MOVW R4,R30
+	RJMP _0x6
+_0x7:
+; 0000 0036 
+; 0000 0037       lcd_comm(0xC0);  //go to 2nd line
+	LDI  R26,LOW(192)
+	RCALL _lcd_comm
+; 0000 0038       lcd_comm(30);    //middle of character
+	LDI  R26,LOW(30)
+	RCALL _lcd_comm
+; 0000 0039 
+; 0000 003A       for(i=13 ; i<26 ; i++){     //line2
+	LDI  R30,LOW(13)
+	LDI  R31,HIGH(13)
+	MOVW R4,R30
+_0x9:
+	LDI  R30,LOW(26)
+	LDI  R31,HIGH(26)
+	CP   R4,R30
+	CPC  R5,R31
+	BRGE _0xA
+; 0000 003B 
+; 0000 003C            lcd_data(alphabet_letters[i]);
+	CALL SUBOPT_0x0
+; 0000 003D 
+; 0000 003E        }
+	MOVW R30,R4
+	ADIW R30,1
+	MOVW R4,R30
+	RJMP _0x9
+_0xA:
+; 0000 003F 
+; 0000 0040 
+; 0000 0041       }
+; 0000 0042 
+; 0000 0043     counter++;
+_0x4:
+	MOVW R30,R6
+	ADIW R30,1
+	MOVW R6,R30
+; 0000 0044 
+; 0000 0045     TCNT1H = 0xFF;
+	LDI  R30,LOW(255)
+	OUT  0x2D,R30
+; 0000 0046     TCNT1L = 0xF0;
+	LDI  R30,LOW(240)
+	OUT  0x2C,R30
+; 0000 0047 
+; 0000 0048 }
+	LD   R30,Y+
+	OUT  SREG,R30
+	LD   R31,Y+
+	LD   R30,Y+
+	LD   R27,Y+
+	LD   R26,Y+
+	LD   R25,Y+
+	LD   R24,Y+
+	LD   R23,Y+
+	LD   R22,Y+
+	LD   R15,Y+
+	LD   R1,Y+
+	LD   R0,Y+
+	RETI
+; .FEND
+;
+;void main(void)
+; 0000 004B {
 _main:
 ; .FSTART _main
-; 0000 0027 
-; 0000 0028 	lcd_init();    //Initialize LCD
-	RCALL _lcd_init
-; 0000 0029 
-; 0000 002A 	lcd_data('H');  //adding the data
-	LDI  R26,LOW(72)
-	RCALL _lcd_data
-; 0000 002B 	lcd_data('E');
-	LDI  R26,LOW(69)
-	RCALL _lcd_data
-; 0000 002C 	lcd_data('L');
-	LDI  R26,LOW(76)
-	RCALL _lcd_data
-; 0000 002D 	lcd_data('L');
-	LDI  R26,LOW(76)
-	RCALL _lcd_data
-; 0000 002E 	lcd_data('O');
-	LDI  R26,LOW(79)
-	RCALL _lcd_data
-; 0000 002F 
-; 0000 0030 	lcd_comm(20);  //create space between the two words
-	LDI  R26,LOW(20)
-	RCALL _lcd_comm
-; 0000 0031 
-; 0000 0032 	lcd_data('W');
-	LDI  R26,LOW(87)
-	RCALL _lcd_data
-; 0000 0033 	lcd_data('O');
-	LDI  R26,LOW(79)
-	RCALL _lcd_data
-; 0000 0034 	lcd_data('R');
-	LDI  R26,LOW(82)
-	RCALL _lcd_data
-; 0000 0035 	lcd_data('L');
-	LDI  R26,LOW(76)
-	RCALL _lcd_data
-; 0000 0036 	lcd_data('D');
-	LDI  R26,LOW(68)
-	RCALL _lcd_data
-; 0000 0037     lcd_data('!');
-	LDI  R26,LOW(33)
-	RCALL _lcd_data
-; 0000 0038 
-; 0000 0039 
-; 0000 003A 	while(1)
-_0x3:
-; 0000 003B 	{
-; 0000 003C 	;  //do nothing
-; 0000 003D 	}
-	RJMP _0x3
-; 0000 003E 
-; 0000 003F }
-_0x6:
-	RJMP _0x6
+; 0000 004C 
+; 0000 004D 	TCCR1A = 0x00;
+	LDI  R30,LOW(0)
+	OUT  0x2F,R30
+; 0000 004E 	TCCR1B = 0x01;  // Clock source: System Clock
+	LDI  R30,LOW(1)
+	OUT  0x2E,R30
+; 0000 004F 
+; 0000 0050     // Timer/Counter 1 initialization
+; 0000 0051     TCNT1H = 0xFF;
+	LDI  R30,LOW(255)
+	OUT  0x2D,R30
+; 0000 0052     TCNT1L = 0xF0;
+	LDI  R30,LOW(240)
+	OUT  0x2C,R30
+; 0000 0053 
+; 0000 0054     // External Interrupt initialization
+; 0000 0055     MCUCR =(0<<ISC11) | (0<<ISC10) | (0<<ISC01) | (0<<ISC00);
+	LDI  R30,LOW(0)
+	OUT  0x35,R30
+; 0000 0056     MCUCSR =(0<<ISC2);
+	OUT  0x34,R30
+; 0000 0057 
+; 0000 0058 	TIMSK = 0x04;   // Enable timer1 overflow interrupt(TOIE1)
+	LDI  R30,LOW(4)
+	OUT  0x39,R30
+; 0000 0059     #asm ("sei")    // Enable global interrupts
+	sei
+; 0000 005A 
+; 0000 005B     while(1){
+_0xB:
+; 0000 005C      ;   //do nothing
+; 0000 005D      }
+	RJMP _0xB
+; 0000 005E 
+; 0000 005F  }
+_0xE:
+	RJMP _0xE
 ; .FEND
 ;
 ;void lcd_comm(char x){
-; 0000 0041 void lcd_comm(char x){
+; 0000 0061 void lcd_comm(char x){
 _lcd_comm:
 ; .FSTART _lcd_comm
-; 0000 0042 
-; 0000 0043 	PORTD = x;
+; 0000 0062 
+; 0000 0063     PORTD = x;
 	ST   -Y,R26
 ;	x -> Y+0
 	LD   R30,Y
 	OUT  0x12,R30
-; 0000 0044 	PORTC &= ~(1<<RS);  //RS=0 command reg.
+; 0000 0064     PORTC &= ~(1<<RS);  //RS=0 command reg.
 	CBI  0x15,0
-; 0000 0045 	PORTC |= 1<<EN;     //Enable Pulse
+; 0000 0065     PORTC |= 1<<EN;     //Enable Pulse
 	RJMP _0x2060001
-; 0000 0046 	delay_ms(30);
-; 0000 0047 	PORTC &= ~(1<<EN);  //Disable Pulse
-; 0000 0048 
-; 0000 0049 }
+; 0000 0066     delay_ms(30);
+; 0000 0067     PORTC &= ~(1<<EN);  //Disable Pulse
+; 0000 0068 
+; 0000 0069 }
 ; .FEND
 ;
 ;void lcd_data(char x){
-; 0000 004B void lcd_data(char x){
+; 0000 006B void lcd_data(char x){
 _lcd_data:
 ; .FSTART _lcd_data
-; 0000 004C 
-; 0000 004D 	PORTD = x;
+; 0000 006C 
+; 0000 006D     PORTD = x;
 	ST   -Y,R26
 ;	x -> Y+0
 	LD   R30,Y
 	OUT  0x12,R30
-; 0000 004E 	PORTC |= 1<<RS;    //RS=1 Data reg.
+; 0000 006E     PORTC |= 1<<RS;    //RS=1 Data reg.
 	SBI  0x15,0
-; 0000 004F 	PORTC |= 1<<EN;    //Enable Pulse
+; 0000 006F     PORTC |= 1<<EN;    //Enable Pulse
 _0x2060001:
 	SBI  0x15,1
-; 0000 0050 	delay_ms(30);
+; 0000 0070     delay_ms(30);
 	LDI  R26,LOW(30)
 	LDI  R27,0
 	CALL _delay_ms
-; 0000 0051 	PORTC &= ~(1<<EN); //Disable Pulse
+; 0000 0071     PORTC &= ~(1<<EN); //Disable Pulse
 	CBI  0x15,1
-; 0000 0052 
-; 0000 0053 }
+; 0000 0072 
+; 0000 0073 }
 	ADIW R28,1
 	RET
 ; .FEND
 ;
 ;void lcd_init(void){
-; 0000 0055 void lcd_init(void){
+; 0000 0075 void lcd_init(void){
 _lcd_init:
 ; .FSTART _lcd_init
-; 0000 0056 
-; 0000 0057 	DDRD = 0xFF;      //PORTD initialization
+; 0000 0076 
+; 0000 0077     DDRD = 0xFF;      //PORTD initialization
 	LDI  R30,LOW(255)
 	OUT  0x11,R30
-; 0000 0058 	DDRC = 0x03;      //PORTC initialization
+; 0000 0078     DDRC = 0x03;      //PORTC initialization
 	LDI  R30,LOW(3)
 	OUT  0x14,R30
-; 0000 0059 
-; 0000 005A 	lcd_comm(0x38);   //initialization of 16X2 LCD in 8bit mode
+; 0000 0079 
+; 0000 007A     lcd_comm(0x38);   //initialization of 16X2 LCD in 8bit mode
 	LDI  R26,LOW(56)
 	RCALL _lcd_comm
-; 0000 005B 	lcd_comm(0x06);   //auto Increment cursor
+; 0000 007B     lcd_comm(0x06);   //auto Increment cursor
 	LDI  R26,LOW(6)
 	RCALL _lcd_comm
-; 0000 005C 	lcd_comm(0x0D);   //Display ON Cursor ON
+; 0000 007C     lcd_comm(0x0D);   //Display ON Cursor ON
 	LDI  R26,LOW(13)
 	RCALL _lcd_comm
-; 0000 005D 	lcd_comm(0x01);   //clear display
+; 0000 007D     lcd_comm(0x01);   //clear display
 	LDI  R26,LOW(1)
 	RCALL _lcd_comm
-; 0000 005E 	lcd_comm(0x80);   //cursor at home position
+; 0000 007E     lcd_comm(0x80);   //cursor at home position
 	LDI  R26,LOW(128)
 	RCALL _lcd_comm
-; 0000 005F 
-; 0000 0060 }
+; 0000 007F 
+; 0000 0080 }
 	RET
 ; .FEND
 	#ifndef __SLEEP_DEFINED__
@@ -1373,7 +1524,20 @@ _lcd_init:
 
 	.CSEG
 
+	.DSEG
+_alphabet_letters:
+	.BYTE 0x1A
+
 	.CSEG
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
+SUBOPT_0x0:
+	LDI  R26,LOW(_alphabet_letters)
+	LDI  R27,HIGH(_alphabet_letters)
+	ADD  R26,R4
+	ADC  R27,R5
+	LD   R26,X
+	JMP  _lcd_data
+
 
 	.CSEG
 _delay_ms:

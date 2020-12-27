@@ -45,7 +45,7 @@ void main(void)
 	lcd_data('L');
 	lcd_data('O');
 
-	lcd_comm(0xC0);		/* Go to 2nd line*/  //create space between the two words
+	lcd_comm(20);  //create space between the two words
 
 	lcd_data('W');
 	lcd_data('O');

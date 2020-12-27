@@ -136,7 +136,7 @@
 ; 0000 0045 	PORTC |= 1<<EN;     //Enable Pulse
 ;PCODE: $00000034 VOL: 0
 ;PCODE: $00000035 VOL: 0
-; 0000 0046 	delay_ms(20);
+; 0000 0046 	delay_ms(30);
 ;PCODE: $00000036 VOL: 0
 ;PCODE: $00000037 VOL: 0
 ;PCODE: $00000038 VOL: 0
@@ -165,7 +165,7 @@
 ; 0000 004F 	PORTC |= 1<<EN;    //Enable Pulse
 ;PCODE: $00000045 VOL: 0
 ;PCODE: $00000046 VOL: 0
-; 0000 0050 	delay_ms(20);
+; 0000 0050 	delay_ms(30);
 ;PCODE: $00000047 VOL: 0
 ;PCODE: $00000048 VOL: 0
 ;PCODE: $00000049 VOL: 0

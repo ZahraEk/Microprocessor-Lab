@@ -67,7 +67,7 @@ void lcd_comm(char x){
 	PORTD = x;
 	PORTC &= ~(1<<RS);  //RS=0 command reg.
 	PORTC |= 1<<EN;     //Enable Pulse
-	delay_ms(20);
+	delay_ms(30);
 	PORTC &= ~(1<<EN);  //Disable Pulse
     
 }
@@ -77,7 +77,7 @@ void lcd_data(char x){
 	PORTD = x;
 	PORTC |= 1<<RS;    //RS=1 Data reg.
 	PORTC |= 1<<EN;    //Enable Pulse
-	delay_ms(20);
+	delay_ms(30);
 	PORTC &= ~(1<<EN); //Disable Pulse
     
 }
