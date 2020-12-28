@@ -1,0 +1,142 @@
+/*******************************************************
+This program was created by the
+CodeWizardAVR V3.12 Advanced
+Automatic Program Generator
+© Copyright 1998-2014 Pavel Haiduc, HP InfoTech s.r.l.
+http://www.hpinfotech.com
+
+Project : 
+Version : 
+Date    : 12/28/2020
+Author  : zahra
+Company : 
+Comments: 
+
+
+Chip type               : ATmega16
+Program type            : Application
+AVR Core Clock frequency: 8.000000 MHz
+Memory model            : Small
+External RAM size       : 0
+Data Stack size         : 256
+*******************************************************/
+
+#include <mega16.h>
+#include <stdio.h>
+#include <delay.h>
+#include <interrupt.h>
+
+#define F_CPU 8000000UL  //CPU Frequency 8MHz 
+#define RS 0             //RS=0
+#define EN 1             //EN=1
+
+void lcd_comm(char);
+void lcd_data(char);
+void lcd_init(void);
+void lcd_clear(void);
+
+void main (void)
+{
+    unsigned int a,b,c,high,period;
+    char frequency[14],duty_cy[7];
+    
+    lcd_init();
+    PORTD = 0xFF;            /* Turn ON pull-up resistor */
+    
+    while(1)
+    {
+        TCCR1A = 0;
+        TCNT1=0;
+        TIFR = (1<<ICF1);      /* Clear ICF (Input Capture flag) flag */
+
+        TCCR1B = 0x41;      /* Rising edge, no prescaler */
+        while ((TIFR&(1<<ICF1)) == 0);
+        a = ICR1;          /* Take value of capture register */
+        TIFR = (1<<ICF1);      /* Clear ICF flag */
+        
+        TCCR1B = 0x01;      /* Falling edge, no prescaler */
+        while ((TIFR&(1<<ICF1)) == 0);
+        b = ICR1;          /* Take value of capture register */
+        TIFR = (1<<ICF1);      /* Clear ICF flag */
+        
+        TCCR1B = 0x41;      /* Rising edge, no prescaler */
+        while ((TIFR&(1<<ICF1)) == 0);
+        c = ICR1;          /* Take value of capture register */
+        TIFR = (1<<ICF1);      /* Clear ICF flag */
+
+        TCCR1B = 0;          /* Stop the timer */
+        
+        if(a<b && b<c)      /* Check for valid condition, 
+                    to avoid timer overflow reading */
+		{
+			high=b-a;
+			period=c-a;
+			
+			long freq= F_CPU/period;/* Calculate frequency */
+
+						/* Calculate duty cycle */
+            		float duty_cycle =((float) high /(float)period)*100;			
+			ltoa(freq,frequency,10);
+			
+			itoa((int)duty_cycle,duty_cy,10);
+			
+			lcd_comm(0x80);
+			lcd_data("F");
+			lcd_data(frequency);
+			lcd_data("H");
+			
+			lcd_comm(0xC0);
+			lcd_data("D");
+			lcd_data(duty_cy);
+			lcd_data("%");
+			
+		}
+		
+		else
+		{
+			lcd_clear();
+			lcd_data("O");
+		}
+		delay_ms(50);
+	}
+
+}
+
+void lcd_comm(char x){
+
+    PORTD = x;
+    PORTC &= ~(1<<RS);  //RS=0 command reg.
+    PORTC |= 1<<EN;     //Enable Pulse
+    delay_ms(30);
+    PORTC &= ~(1<<EN);  //Disable Pulse
+    
+}
+
+void lcd_data(char x){
+
+    PORTD = x;
+    PORTC |= 1<<RS;    //RS=1 Data reg.
+    PORTC |= 1<<EN;    //Enable Pulse
+    delay_ms(30);
+    PORTC &= ~(1<<EN); //Disable Pulse
+    
+}
+
+void lcd_clear()
+{
+	lcd_comm(0x01);		/* clear display */
+	lcd_comm(0x80);		/* cursor at home position */
+}
+
+void lcd_init(void){
+
+    DDRD = 0xFF;      //PORTD initialization
+    DDRC = 0x03;      //PORTC initialization
+    
+    lcd_comm(0x38);   //initialization of 16X2 LCD in 8bit mode 
+    lcd_comm(0x06);   //auto Increment cursor
+    lcd_comm(0x0D);   //Display ON Cursor ON
+    lcd_comm(0x01);   //clear display
+    lcd_comm(0x80);   //cursor at home position
+    
+}
