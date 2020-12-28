@@ -55,7 +55,7 @@ interrupt [TIM1_OVF] void timer1_ovf_isr(void)    // Timer1 ISR
       lcd_comm(0xC0);  //go to 2nd line
       lcd_comm(30);    //middle of character
 
-       for(i=13 ; i<26 ; i++){     //line2
+      for(i=13 ; i<26 ; i++){     //line2
            
            lcd_data(alphabet_letters[i]);
             
@@ -73,7 +73,6 @@ interrupt [TIM1_OVF] void timer1_ovf_isr(void)    // Timer1 ISR
 
 void main(void)
 {
-    DDRD = 0xFF; //PORTA initialization
 
 	TCCR1A = 0x00;
 	TCCR1B = 0x01;  // Clock source: System Clock      
@@ -100,7 +99,7 @@ void lcd_comm(char x){
     PORTD = x;
     PORTC &= ~(1<<RS);  //RS=0 command reg.
     PORTC |= 1<<EN;     //Enable Pulse
-    delay_ms(20);
+    delay_ms(30);
     PORTC &= ~(1<<EN);  //Disable Pulse
     
 }
@@ -110,7 +109,7 @@ void lcd_data(char x){
     PORTD = x;
     PORTC |= 1<<RS;    //RS=1 Data reg.
     PORTC |= 1<<EN;    //Enable Pulse
-    delay_ms(20);
+    delay_ms(30);
     PORTC &= ~(1<<EN); //Disable Pulse
     
 }

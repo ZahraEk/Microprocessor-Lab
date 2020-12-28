@@ -53,7 +53,7 @@ interrupt [TIM1_OVF] void timer1_ovf_isr(void)    // Timer1 ISR
       }
 
       lcd_comm(0xC0);  //go to 2nd line
-      lcd_comm(30);    //middle of character
+      lcd_comm(30);    //characters are in middle of LCD
 
       for(i=13 ; i<26 ; i++){     //line2
            
@@ -77,7 +77,7 @@ void main(void)
 	TCCR1A = 0x00;
 	TCCR1B = 0x01;  // Clock source: System Clock      
     
-    // Timer/Counter 1 initialization 
+    // Timer1 initialization 
     TCNT1H = 0xFF;  
     TCNT1L = 0xF0; 
     

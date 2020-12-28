@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.30  C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project3\Project3.2\Code\Debug\List\code2.asm Sun Dec 27 17:30:47 2020
+AVRASM ver. 2.1.30  C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project3\Project3.2\Code\Debug\List\code2.asm Mon Dec 28 20:42:58 2020
 
 C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project3\Project3.2\Code\Debug\List\code2.asm(1088): warning: Register r4 already defined by the .DEF directive
 C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project3\Project3.2\Code\Debug\List\code2.asm(1089): warning: Register r5 already defined by the .DEF directive
@@ -1350,7 +1350,7 @@ C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project3\P
                  ; 0000 0037       lcd_comm(0xC0);  //go to 2nd line
 000094 eca0      	LDI  R26,LOW(192)
 000095 d035      	RCALL _lcd_comm
-                 ; 0000 0038       lcd_comm(30);    //middle of character
+                 ; 0000 0038       lcd_comm(30);    //characters are in middle of LCD
 000096 e1ae      	LDI  R26,LOW(30)
 000097 d033      	RCALL _lcd_comm
                  ; 0000 0039 
@@ -1420,7 +1420,7 @@ C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project3\P
 0000bd e0e1      	LDI  R30,LOW(1)
 0000be bdee      	OUT  0x2E,R30
                  ; 0000 004F 
-                 ; 0000 0050     // Timer/Counter 1 initialization
+                 ; 0000 0050     // Timer1 initialization
                  ; 0000 0051     TCNT1H = 0xFF;
 0000bf efef      	LDI  R30,LOW(255)
 0000c0 bded      	OUT  0x2D,R30

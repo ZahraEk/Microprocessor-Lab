@@ -1326,7 +1326,7 @@ _0x7:
 ; 0000 0037       lcd_comm(0xC0);  //go to 2nd line
 	LDI  R26,LOW(192)
 	RCALL _lcd_comm
-; 0000 0038       lcd_comm(30);    //middle of character
+; 0000 0038       lcd_comm(30);    //characters are in middle of LCD
 	LDI  R26,LOW(30)
 	RCALL _lcd_comm
 ; 0000 0039 
@@ -1396,7 +1396,7 @@ _main:
 	LDI  R30,LOW(1)
 	OUT  0x2E,R30
 ; 0000 004F 
-; 0000 0050     // Timer/Counter 1 initialization
+; 0000 0050     // Timer1 initialization
 ; 0000 0051     TCNT1H = 0xFF;
 	LDI  R30,LOW(255)
 	OUT  0x2D,R30

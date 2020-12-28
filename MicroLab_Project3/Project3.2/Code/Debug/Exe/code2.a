@@ -107,7 +107,7 @@
 ; 0000 0037       lcd_comm(0xC0);  //go to 2nd line
 ;PCODE: $00000025 VOL: 0
 ;PCODE: $00000026 VOL: 0
-; 0000 0038       lcd_comm(30);    //middle of character
+; 0000 0038       lcd_comm(30);    //characters are in middle of LCD
 ;PCODE: $00000027 VOL: 0
 ;PCODE: $00000028 VOL: 0
 ; 0000 0039 
@@ -169,7 +169,7 @@
 ;PCODE: $0000004B VOL: 0
 ;PCODE: $0000004C VOL: 0
 ; 0000 004F 
-; 0000 0050     // Timer/Counter 1 initialization
+; 0000 0050     // Timer1 initialization
 ; 0000 0051     TCNT1H = 0xFF;
 ;PCODE: $0000004D VOL: 0
 ;PCODE: $0000004E VOL: 0
