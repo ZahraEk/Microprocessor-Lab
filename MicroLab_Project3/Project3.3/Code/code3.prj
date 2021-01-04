@@ -125,10 +125,10 @@ WarningStaticRamEepromStorageAllocConstStrLit=0
 DebugBootLoader=0
 WatchAVR8LAutoVariables=0
 UseEEPROMLocation0=1
-RebuildAll=1
+RebuildAll=0
 LinkageInformationPresent=1
-COFFileTimeStamp=-1
-Build=1
+COFFileTimeStamp=1378100194
+Build=15
 [DefinedSymbolsDebug]
 Count=0
 [Compiler]
@@ -230,7 +230,7 @@ UseEEPROMLocation0=1
 RebuildAll=1
 LinkageInformationPresent=0
 COFFileTimeStamp=-1
-Build=1
+Build=15
 [DefinedSymbols]
 Count=0
 [StartUp]
@@ -327,39 +327,43 @@ L13=Enhanced function parameters passing: Yes
 L14=Automatic register allocation: Yes
 L15=Smart register allocation: Yes
 L16=
-L17=Build: 1
-L18=9310 line(s) compiled
-L19=1 error(s)
-L20=No warnings
+L17=Build: 15
+L18=9360 line(s) compiled
+L19=No errors
+L20=1 warning(s)
 L21=
 L22=Bit variables size: 0 byte(s)
 L23=
 L24=Data Stack area: 0x60 to 0x15F
 L25=Data Stack size: 256 byte(s)
-L26=Estimated Data Stack usage: 0 byte(s)
+L26=Estimated Data Stack usage: 48 byte(s)
 L27=
-L28=RAM Global variables size: 0 byte(s)
-L29=
-L30=Hardware Stack area: 0x160 to 0x45F
-L31=Hardware Stack size: 768 byte(s)
-L32=
-L33=Heap size: 0 byte(s)
-L34=
-L35=EEPROM usage: 0 byte(s), 0.0% of EEPROM
-Lines=35
+L28=RAM Global variables area: 0x160 to 0x16B
+L29=RAM Global variables size: 12 byte(s)
+L30=
+L31=Hardware Stack area: 0x16C to 0x45F
+L32=Hardware Stack size: 756 byte(s)
+L33=
+L34=Heap size: 0 byte(s)
+L35=
+Lines=38
+L36=EEPROM usage: 0 byte(s), 0.0% of EEPROM
+L37=Program size: 813 words (1626 bytes), 9.9% of FLASH
+L38=32 words (64 bytes), 3.8% reduced by Code Compression
 [BuildInfoAssembler]
-Lines=0
-[HeadersList]
-Files=1
-F1=C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project3\Project3.3\Code\code3.c
-[Header1]
-Files=6
-F1=C:\cvavr\inc\mega16.h
-F2=C:\cvavr\inc\mega16_bits.h
-F3=C:\cvavr\inc\stdio.h
-F4=C:\cvavr\inc\io.h
-F5=C:\cvavr\inc\stdarg.h
-F6=C:\cvavr\inc\delay.h
+Lines=12
+L1=AVRASM: AVR macro assembler 2.1.30 (build 592 Nov  7 2008 12:38:17)
+L2=Copyright (C) 1995-2008 ATMEL Corporation
+L3=
+L4=C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project3\Project3.3\Code\Debug\List\code3.asm(2221): No EEPROM data, deleting C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project3\Project3.3\Code\Debug\Exe\code3.eep
+L5=
+L6=ATmega16 memory use summary [bytes]:
+L7=Segment   Begin    End      Code   Data   Used    Size   Use%
+L8=---------------------------------------------------------------
+L9=[.cseg] 0x000000 0x00065a   1592     34   1626   16384   9.9%
+L10=[.dseg] 0x000060 0x00016c      0     12     12    1024   1.2%
+L11=[.eseg] 0x000000 0x000000      0      0      0     512   0.0%
+L12=
 [Bookmarks0]
 Row=0
 Column=0
@@ -387,3 +391,14 @@ BK8=-1
 BK9=-1
 [FoldedCode1]
 Blocks=0
+[HeadersList]
+Files=1
+F1=C:\Users\Lenovo\MicroprocessorLabProjects\Microprocessor-Lab\MicroLab_Project3\Project3.3\Code\code3.c
+[Header1]
+Files=6
+F1=C:\cvavr\inc\mega16.h
+F2=C:\cvavr\inc\mega16_bits.h
+F3=C:\cvavr\inc\stdio.h
+F4=C:\cvavr\inc\io.h
+F5=C:\cvavr\inc\stdarg.h
+F6=C:\cvavr\inc\delay.h

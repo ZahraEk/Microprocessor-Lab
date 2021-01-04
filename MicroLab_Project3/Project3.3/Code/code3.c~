@@ -24,101 +24,81 @@ Data Stack size         : 256
 #include <mega16.h>
 #include <stdio.h>
 #include <delay.h>
-#include <interrupt.h>
 
 #define F_CPU 8000000UL  //CPU Frequency 8MHz 
 #define RS 0             //RS=0
 #define EN 1             //EN=1
 
+int ov_counter;
+int i = 0;
+unsigned int start_edge, end_edge;
+unsigned int clocks,period_out;
+char frequency[10];
+
 void lcd_comm(char);
 void lcd_data(char);
 void lcd_init(void);
 void lcd_clear(void);
-
-void main (void)
-{
-    unsigned int a,b,c,high,period;
-    char frequency[14],duty_cy[7];
-    
-    lcd_init();
-    PORTD = 0xFF;            /* Turn ON pull-up resistor */
-    
-    while(1)
-    {
-        TCCR1A = 0;
-        TCNT1=0;
-        TIFR = (1<<ICF1);      /* Clear ICF (Input Capture flag) flag */
-
-        TCCR1B = 0x41;      /* Rising edge, no prescaler */
-        while ((TIFR&(1<<ICF1)) == 0);
-        a = ICR1;          /* Take value of capture register */
-        TIFR = (1<<ICF1);      /* Clear ICF flag */
-        
-        TCCR1B = 0x01;      /* Falling edge, no prescaler */
-        while ((TIFR&(1<<ICF1)) == 0);
-        b = ICR1;          /* Take value of capture register */
-        TIFR = (1<<ICF1);      /* Clear ICF flag */
-        
-        TCCR1B = 0x41;      /* Rising edge, no prescaler */
-        while ((TIFR&(1<<ICF1)) == 0);
-        c = ICR1;          /* Take value of capture register */
-        TIFR = (1<<ICF1);      /* Clear ICF flag */
-
-        TCCR1B = 0;          /* Stop the timer */
-        
-        if(a<b && b<c)      /* Check for valid condition, 
-                    to avoid timer overflow reading */
-		{
-			high=b-a;
-			period=c-a;
-			
-			long freq= F_CPU/period;/* Calculate frequency */
-
-						/* Calculate duty cycle */
-            		float duty_cycle =((float) high /(float)period)*100;			
-			ltoa(freq,frequency,10);
-			
-			itoa((int)duty_cycle,duty_cy,10);
-			
-			lcd_comm(0x80);
-			lcd_data("F");
-			lcd_data(frequency);
-			lcd_data("H");
-			
-			lcd_comm(0xC0);
-			lcd_data("D");
-			lcd_data(duty_cy);
-			lcd_data("%");
-			
-		}
 		
-		else
-		{
-			lcd_clear();
-			lcd_data("O");
-		}
-		delay_ms(50);
-	}
+interrupt [TIM1_OVF] void timer1_ovf_isr(void){
 
+     ++ov_counter;
+}
+
+interrupt [TIM1_CAPT] void timer1_capt_isr(void){
+
+      end_edge = 256 * ICR1H + ICR1L + ov_counter * 65536;
+      clocks =(unsigned long)end_edge + ((unsigned long)ov_counter *65536) - (unsigned long)start_edge; 
+      period_out = (clocks/750) ;   
+      ov_counter = 0;
+      start_edge = end_edge;  
+      
+      sprintf(frequency,"%d Hz", period_out); 
+      lcd_init();    //initialize LCD      
+
+     //adding data
+      for(i=0 ; i<6 ; i++){     //line1
+           
+           lcd_data(frequency[i]);
+            
+      }
+
+}
+
+void main(void)
+{
+
+TCCR1A = 0x00;
+TCCR1B = 0xC2;
+
+TIMSK = 0x24;
+
+#asm("sei")
+
+while (1)
+      {
+       ;   //do nothing
+
+      }
 }
 
 void lcd_comm(char x){
 
-    PORTD = x;
-    PORTC &= ~(1<<RS);  //RS=0 command reg.
-    PORTC |= 1<<EN;     //Enable Pulse
+    PORTB = x;
+    PORTA &= ~(1<<RS);  //RS=0 command reg.
+    PORTA |= 1<<EN;     //Enable Pulse
     delay_ms(30);
-    PORTC &= ~(1<<EN);  //Disable Pulse
+    PORTA &= ~(1<<EN);  //Disable Pulse
     
 }
 
 void lcd_data(char x){
 
-    PORTD = x;
-    PORTC |= 1<<RS;    //RS=1 Data reg.
-    PORTC |= 1<<EN;    //Enable Pulse
+    PORTB = x;
+    PORTA |= 1<<RS;    //RS=1 Data reg.
+    PORTA |= 1<<EN;    //Enable Pulse
     delay_ms(30);
-    PORTC &= ~(1<<EN); //Disable Pulse
+    PORTA &= ~(1<<EN); //Disable Pulse
     
 }
 
@@ -130,8 +110,8 @@ void lcd_clear()
 
 void lcd_init(void){
 
-    DDRD = 0xFF;      //PORTD initialization
-    DDRC = 0x03;      //PORTC initialization
+    DDRA = 0x03;      //PORTA initialization   
+    DDRB = 0xFF;
     
     lcd_comm(0x38);   //initialization of 16X2 LCD in 8bit mode 
     lcd_comm(0x06);   //auto Increment cursor
